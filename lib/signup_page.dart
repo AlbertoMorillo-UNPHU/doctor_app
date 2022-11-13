@@ -1,4 +1,6 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -122,6 +124,14 @@ class SignupPage extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                         color: Colors.white))),
           ),
+          const SizedBox(
+            height: 10,
+          ),
+          RichText(
+              text: TextSpan(
+                  recognizer: TapGestureRecognizer()..onTap = () => Get.back(),
+                  text: "Have an account?",
+                  style: const TextStyle(fontSize: 20, color: Colors.grey))),
           SizedBox(
             height: w * 0.08,
           ),
@@ -132,12 +142,15 @@ class SignupPage extends StatelessWidget {
                   children: const [])),
           Wrap(
             children: List<Widget>.generate(3, (index) {
-              return CircleAvatar(
-                radius: 4,
-                backgroundColor: Colors.grey[500],
+              return Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: CircleAvatar(
-                  radius: 2,
-                  backgroundImage: AssetImage("img/${images[index]}"),
+                  radius: 4,
+                  backgroundColor: Colors.grey[500],
+                  child: CircleAvatar(
+                    radius: 2,
+                    backgroundImage: AssetImage("img/${images[index]}"),
+                  ),
                 ),
               );
             }),

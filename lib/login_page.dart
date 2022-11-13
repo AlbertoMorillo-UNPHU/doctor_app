@@ -1,9 +1,14 @@
+import 'package:doctor_app/signup_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+//import 'package:get/get_core/src/get_main.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 
@@ -51,6 +56,11 @@ class _LoginPageState extends State<LoginPage> {
                         ]),
                     child: TextField(
                       decoration: InputDecoration(
+                        hintText: "Email",
+                          prefix: const Icon(
+                            Icons.email,
+                            color: Colors.deepOrangeAccent,
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: const BorderSide(
@@ -78,6 +88,11 @@ class _LoginPageState extends State<LoginPage> {
                         ]),
                     child: TextField(
                       decoration: InputDecoration(
+                        hintText: "Password",
+                          prefix: const Icon(
+                            Icons.password,
+                            color: Colors.deepOrangeAccent,
+                          ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: const BorderSide(
@@ -131,13 +146,16 @@ class _LoginPageState extends State<LoginPage> {
               text: TextSpan(
                   text: "Don't have an account?",
                   style: TextStyle(color: Colors.grey[500], fontSize: 20),
-                  children: const [
+                  children: [
                 TextSpan(
+
                     text: " Create",
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
-                        fontWeight: FontWeight.bold))
+                        fontWeight: FontWeight.bold),
+                        recognizer: TapGestureRecognizer()..onTap=()=>Get.to(() => const SignupPage())
+                        )
               ])
               ),
         ],
