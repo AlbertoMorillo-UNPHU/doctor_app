@@ -1,4 +1,5 @@
 import 'package:doctor_app/login_page.dart';
+import 'package:doctor_app/screens/home_page.dart';
 import 'package:doctor_app/signup_page.dart';
 import 'package:flutter/material.dart';
 
@@ -13,12 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Doctor APP',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const SignupPage(),
+          primarySwatch: Colors.blue,
+          primaryColor: Colors.orange[100],
+          appBarTheme: const AppBarTheme(elevation: 0.0)),
+      home: const HomePage(),
     );
   }
 }
