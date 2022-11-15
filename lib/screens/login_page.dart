@@ -1,4 +1,4 @@
-import 'package:doctor_app/auth_controller.dart';
+import 'package:doctor_app/controller/auth_controller.dart';
 import 'package:doctor_app/screens/signup_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
                   const Text("Hello",
                       style:
                           TextStyle(fontSize: 70, fontWeight: FontWeight.bold)),
-                  Text("Inicié sesión",
+                  Text("Inicie sesión",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.grey[500],
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               )),
           const SizedBox(
-            height: 70,
+            height: 00,
           ),
           GestureDetector(
             onTap: () {

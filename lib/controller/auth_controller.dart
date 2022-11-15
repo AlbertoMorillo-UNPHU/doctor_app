@@ -32,7 +32,9 @@ class AuthController extends GetxController {
       Get.offAll(() => const LoginPage());
     } else {
       //Get.offAll(() => WelcomePage(email: user.email));
-      Get.offAll(() => const HomePage());
+      Get.offAll(() => WelcomePage(
+            email: user.email,
+          ));
     }
   }
 
