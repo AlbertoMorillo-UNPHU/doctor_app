@@ -1,9 +1,13 @@
 import 'package:doctor_app/login_page.dart';
-import 'package:doctor_app/screens/home_page.dart';
 import 'package:doctor_app/signup_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-void main() {
+import 'auth_controller.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
   runApp(const MyApp());
 }
 
@@ -14,13 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Doctor APP',
+      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Colors.blue,
-          primaryColor: Colors.orange[100],
-          appBarTheme: const AppBarTheme(elevation: 0.0)),
-      home: const HomePage(),
+        primarySwatch: Colors.blue,
+      ),
+      home: const SignupPage(),
     );
   }
 }
