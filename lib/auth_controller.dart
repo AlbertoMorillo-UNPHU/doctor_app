@@ -1,6 +1,7 @@
 //import 'dart:html';
 
-import 'package:doctor_app/login_page.dart';
+import 'package:doctor_app/screens/home_page.dart';
+import 'package:doctor_app/screens/login_page.dart';
 import 'package:doctor_app/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:flutter/cupertino.dart';
@@ -30,7 +31,8 @@ class AuthController extends GetxController {
       ('login page');
       Get.offAll(() => const LoginPage());
     } else {
-      Get.offAll(() => WelcomePage(email: user.email));
+      //Get.offAll(() => WelcomePage(email: user.email));
+      Get.offAll(() => const HomePage());
     }
   }
 
@@ -71,7 +73,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void logOut()async{
+  void logOut() async {
     await auth.signOut();
   }
 }

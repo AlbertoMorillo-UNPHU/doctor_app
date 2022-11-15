@@ -88,7 +88,7 @@ class SignupPage extends StatelessWidget {
                               color: Colors.grey.withOpacity(0.2))
                         ]),
                     child: TextField(
-                      controller: emailController,
+                      controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                           hintText: "Password",
@@ -118,7 +118,8 @@ class SignupPage extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              AuthController.instance.register(emailController.text.trim(), passwordController.text.trim());
+              AuthController.instance.register(
+                  emailController.text.trim(), passwordController.text.trim());
             },
             child: Container(
               width: w * 0.5,
