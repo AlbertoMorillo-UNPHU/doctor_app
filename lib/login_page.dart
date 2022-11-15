@@ -1,3 +1,4 @@
+import 'package:doctor_app/auth_controller.dart';
 import 'package:doctor_app/signup_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
@@ -55,8 +58,9 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.grey.withOpacity(0.2))
                         ]),
                     child: TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
-                        hintText: "Email",
+                          hintText: "Email",
                           prefix: const Icon(
                             Icons.email,
                             color: Colors.deepOrangeAccent,
@@ -87,8 +91,10 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.grey.withOpacity(0.2))
                         ]),
                     child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
                       decoration: InputDecoration(
-                        hintText: "Password",
+                          hintText: "Password",
                           prefix: const Icon(
                             Icons.password,
                             color: Colors.deepOrangeAccent,
@@ -123,24 +129,31 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               )),
           const SizedBox(
-            height: 0,
+            height: 70,
           ),
-          Container(
-            width: w * 0.5,
-            height: h * 0.08,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                image: const DecorationImage(
-                    image: AssetImage("img/loginbtn.png"), fit: BoxFit.cover)),
-            child: const Center(
-                child: Text("Sign in",
-                    style: TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white))),
+          GestureDetector(
+            onTap: () {
+              AuthController.instance.login(
+                  emailController.text.trim(), passwordController.text.trim());
+            },
+            child: Container(
+              width: w * 0.5,
+              height: h * 0.08,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  image: const DecorationImage(
+                      image: AssetImage("img/loginbtn.png"),
+                      fit: BoxFit.cover)),
+              child: const Center(
+                  child: Text("Sign in",
+                      style: TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white))),
+            ),
           ),
           SizedBox(
-            height: w * 0.08,
+            height: w * 0.02,
           ),
           RichText(
               text: TextSpan(
@@ -148,16 +161,14 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(color: Colors.grey[500], fontSize: 20),
                   children: [
                 TextSpan(
-
                     text: " Create",
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
                         fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()..onTap=()=>Get.to(() => const SignupPage())
-                        )
-              ])
-              ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => Get.to(() => const SignupPage()))
+              ])),
         ],
       ),
     );
