@@ -2,11 +2,12 @@
 
 import 'package:doctor_app/screens/home_page.dart';
 import 'package:doctor_app/screens/login_page.dart';
-import 'package:doctor_app/welcome_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../screens/welcome_page.dart';
 
 //import 'package:get/get.dart';
 
@@ -31,10 +32,8 @@ class AuthController extends GetxController {
       ('login page');
       Get.offAll(() => const LoginPage());
     } else {
-      //Get.offAll(() => WelcomePage(email: user.email));
-      Get.offAll(() => WelcomePage(
-            email: user.email,
-          ));
+      Get.offAll(() => WelcomePage(email: user.email));
+      //Get.offAll(() => const HomePage());
     }
   }
 

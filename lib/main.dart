@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doctor_app/screens/login_page.dart';
 import 'package:doctor_app/screens/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'controller/auth_controller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) => Get.put(AuthController()));
+  HttpOverrides.global = MyHttpOverrides();
   runApp(const MyApp());
 }
 
@@ -25,5 +28,14 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginPage(),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

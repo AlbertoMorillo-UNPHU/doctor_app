@@ -1,5 +1,5 @@
 import 'package:doctor_app/models/todo.dart';
-import 'package:doctor_app/repository/repository.dart';
+import 'package:doctor_app/abstract/repository.dart';
 
 class TodoController {
   final Repository _repository;

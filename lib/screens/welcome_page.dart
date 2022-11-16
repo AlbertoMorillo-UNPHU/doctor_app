@@ -1,15 +1,10 @@
 import 'package:doctor_app/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 
-class WelcomePage extends StatefulWidget {
+class WelcomePage extends StatelessWidget {
   String? email;
   WelcomePage({super.key, required this.email});
 
-  @override
-  State<WelcomePage> createState() => _WelcomePageState();
-}
-
-class _WelcomePageState extends State<WelcomePage> {
   @override
   Widget build(BuildContext context) {
     // List images = ["g.png", "t.png", "f.png"];
@@ -57,7 +52,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       color: Colors.black54),
                 ),
                 Text(
-                  widget.email!,
+                  email!,
                   style: const TextStyle(fontSize: 18, color: Colors.grey),
                 ),
               ],
