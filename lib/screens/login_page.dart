@@ -146,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                       image: const DecorationImage(
-                          image: AssetImage("img/loginbtn.png"),
+                          image: AssetImage("assets/img/loginbtn.png"),
                           fit: BoxFit.cover)),
                   child: const Center(
                       child: Text("Sign in",

@@ -1,7 +1,9 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 
 import 'package:doctor_app/screens/login_page.dart';
-import 'package:doctor_app/screens/signup_page.dart';
+//import 'package:doctor_app/screens/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_core/firebase_core.dart';

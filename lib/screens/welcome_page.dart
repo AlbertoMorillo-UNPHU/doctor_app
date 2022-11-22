@@ -19,7 +19,7 @@ class WelcomePage extends StatelessWidget {
             height: h * 0.37,
             decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("img/signup.png"), fit: BoxFit.cover)),
+                    image: AssetImage("assets/img/signup.png"), fit: BoxFit.cover)),
             child: Column(
               children: [
                 SizedBox(
@@ -28,7 +28,7 @@ class WelcomePage extends StatelessWidget {
                 const CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 50,
-                  backgroundImage: AssetImage("img/profile1.png"),
+                  backgroundImage: AssetImage("assets/img/profile1.png"),
                 )
               ],
             ),
@@ -71,7 +71,7 @@ class WelcomePage extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   image: const DecorationImage(
-                      image: AssetImage("img/loginbtn.png"),
+                      image: AssetImage("assets/img/loginbtn.png"),
                       fit: BoxFit.cover)),
               child: const Center(
                   child: Text("Sign out",
