@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:doctor_app/screens/doctor_detail_screen.dart';
+import 'package:doctor_app/screens/home_screen.dart';
 import 'package:doctor_app/screens/login_page.dart';
 //import 'package:doctor_app/screens/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const DoctorDetailScreen(),
+      home: const HomeScreen(),
     );
   }
 }

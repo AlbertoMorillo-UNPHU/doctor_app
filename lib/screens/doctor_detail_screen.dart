@@ -15,7 +15,7 @@ class DoctorDetailScreen extends StatelessWidget {
       body: Column(
         children: [
           Hero(
-            tag: 'assets/images/${args.doctorPicture}',
+            tag: 'assets/img/${args.doctorPicture}',
             child: Material(
               type: MaterialType.transparency,
               child: Container(
@@ -26,7 +26,7 @@ class DoctorDetailScreen extends StatelessWidget {
                   image: DecorationImage(
                     fit: BoxFit.cover,
                     image: AssetImage(
-                      'assets/images/${args.doctorPicture}',
+                      'assets/img/${args.doctorPicture}',
                     ),
                   ),
                 ),

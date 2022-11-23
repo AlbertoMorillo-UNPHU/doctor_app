@@ -30,8 +30,8 @@ class HomeScreenNavbar extends StatelessWidget {
           height: 36,
           child: const CircleAvatar(
             backgroundColor: kBlueColor,
-            backgroundImage: NetworkImage(
-                'https://blogger.googleusercontent.com/img/a/AVvXsEiRB_dB-wXqJdvt26dkR-vqOXUjacfxAQIgFNMHl_czjMNDOh6VZVc-muCczDKZh-VU0JqUYV1M9h25ZooLGqhVfwexQO6zNY1jxeMDu0-SpfEPe8xkF7re1eldAkKld9Ct1YzesFmHpQK9wlPK330AXA85gsmDBURTQm3i7r08g6vO7KNtAPyDgeUIaQ=s740'),
+            backgroundImage: AssetImage(
+                'assets/img/foto-alex.png'),
           ),
         )
       ],

@@ -19,7 +19,7 @@ class TopDoctorsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Hero(
-              tag: 'assets/images/${doctor!.doctorPicture}',
+              tag: 'assets/img/${doctor!.doctorPicture}',
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
@@ -29,7 +29,7 @@ class TopDoctorsCard extends StatelessWidget {
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: AssetImage(
-                        'assets/images/${doctor!.doctorPicture}',
+                        'assets/img/${doctor!.doctorPicture}',
                       ),
                     ),
                   ),
