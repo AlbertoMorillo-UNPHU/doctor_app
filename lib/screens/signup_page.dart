@@ -74,7 +74,7 @@ class _SignupPageState extends State<SignupPage> {
                               hintText: "Email",
                               prefix: const Icon(
                                 Icons.email,
-                                color: Colors.deepOrangeAccent,
+                                color: Colors.blueAccent,
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
@@ -108,7 +108,7 @@ class _SignupPageState extends State<SignupPage> {
                               hintText: "Password",
                               prefix: const Icon(
                                 Icons.password_outlined,
-                                color: Colors.deepOrangeAccent,
+                                color: Colors.blueAccent,
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),

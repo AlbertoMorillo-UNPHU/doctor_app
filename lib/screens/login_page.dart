@@ -41,10 +41,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text("Hello",
+                      const Text("Easy Doctor",
                           style: TextStyle(
-                              fontSize: 70, fontWeight: FontWeight.bold)),
-                      Text("Inicié sesión",
+                              fontSize: 55, fontWeight: FontWeight.bold)),
+                      Text("Looking for your Doctor?",
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.grey[500],
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Email",
                               prefix: const Icon(
                                 Icons.email,
-                                color: Colors.deepOrangeAccent,
+                                color: Colors.blueAccent,
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintText: "Password",
                               prefix: const Icon(
                                 Icons.password,
-                                color: Colors.deepOrangeAccent,
+                                color: Colors.blueAccent,
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
