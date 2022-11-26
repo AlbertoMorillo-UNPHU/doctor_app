@@ -1,9 +1,15 @@
+import 'dart:ffi';
+
 import 'package:doctor_app/controller/auth_controller.dart';
+import 'package:doctor_app/screens/doctors/doctor_page.dart';
+import 'package:doctor_app/screens/user_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class WelcomePage extends StatelessWidget {
-  String? email;
-  WelcomePage({super.key, required this.email});
+  User? userFire;
+  WelcomePage({super.key, required this.userFire});
 
   @override
   Widget build(BuildContext context) {
@@ -11,6 +17,11 @@ class WelcomePage extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Menú Principal"),
+        backgroundColor: Colors.orangeAccent,
+      ),
+      drawer: NavigationDrawer(userFire: userFire),
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -52,7 +63,7 @@ class WelcomePage extends StatelessWidget {
                       color: Colors.black54),
                 ),
                 Text(
-                  email!,
+                  userFire!.email!,
                   style: const TextStyle(fontSize: 18, color: Colors.grey),
                 ),
               ],
@@ -83,6 +94,93 @@ class WelcomePage extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class NavigationDrawer extends StatelessWidget {
+  final User? userFire;
+  const NavigationDrawer({Key? key, required this.userFire}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(children: <Widget>[
+        buidHeader(context),
+        buildMenuItems(context),
+      ]),
+    );
+  }
+
+  Widget buidHeader(BuildContext context) {
+    String? username = userFire!.email.toString();
+    return Material(
+      child: InkWell(
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => UserPage(
+                    userFire: userFire,
+                  )));
+        },
+        child: Container(
+          padding: EdgeInsets.only(
+              top: 24 + MediaQuery.of(context).padding.top, bottom: 24),
+          child: Column(
+            children: [
+              const CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 50,
+                backgroundImage: AssetImage("img/profile1.png"),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              Text(username,
+                  style:
+                      const TextStyle(fontSize: 16, color: Colors.orangeAccent))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildMenuItems(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      child: Wrap(runSpacing: 16, children: [
+        ListTile(
+          leading: const Icon(Icons.accessibility_new),
+          title: const Text('Doctores'),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DoctorPage(userFire: userFire!),
+            ));
+          },
+        ),
+        ListTile(
+          leading: const Icon(Icons.airline_seat_flat),
+          title: const Text('Pacientes'),
+          onTap: () {},
+        ),
+        const Divider(color: Colors.black54),
+        ListTile(
+          leading: const Icon(Icons.analytics_rounded),
+          title: const Text('Diagnósticos'),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.medication_liquid),
+          title: const Text('Tratamientos'),
+          onTap: () {},
+        ),
+        ListTile(
+          leading: const Icon(Icons.assignment),
+          title: const Text('Citas'),
+          onTap: () {},
+        ),
+      ]),
     );
   }
 }

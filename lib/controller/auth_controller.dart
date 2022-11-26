@@ -7,7 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../models/usuarios.dart';
+import '../repository/usuario_repository.dart';
 import '../screens/welcome_page.dart';
+import 'usuario_controller.dart';
 
 //import 'package:get/get.dart';
 
@@ -32,7 +35,9 @@ class AuthController extends GetxController {
       ('login page');
       Get.offAll(() => const LoginPage());
     } else {
-      Get.offAll(() => WelcomePage(email: user.email));
+      Get.offAll(() => WelcomePage(
+            userFire: user,
+          ));
       //Get.offAll(() => const HomePage());
     }
   }
@@ -54,6 +59,12 @@ class AuthController extends GetxController {
             style: const TextStyle(color: Colors.white),
           ));
     }
+    UsuarioController usuarioController =
+        UsuarioController(UsuarioRepository());
+    Usuarios usuarios =
+        Usuarios(username: email, uidFire: auth.currentUser?.uid);
+
+    usuarioController.postUsario(usuarios);
   }
 
   void login(String email, password) async {

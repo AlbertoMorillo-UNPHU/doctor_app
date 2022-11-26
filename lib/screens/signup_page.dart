@@ -17,7 +17,6 @@ class _SignupPageState extends State<SignupPage> {
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
-  UsuarioController usuarioController = UsuarioController(UsuarioRepository());
 
   @override
   Widget build(BuildContext context) {
@@ -133,13 +132,6 @@ class _SignupPageState extends State<SignupPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Usuarios usuarios = Usuarios(
-                      username: emailController.text.trim(),
-                      email: emailController.text.trim(),
-                      password: passwordController.text.trim());
-
-                  usuarioController.postUsario(usuarios);
-                  print(usuarios);
                   AuthController.instance.register(emailController.text.trim(),
                       passwordController.text.trim());
                 },

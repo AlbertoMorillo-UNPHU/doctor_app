@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:doctor_app/models/usuarios.dart';
 import 'package:http/http.dart' as http;
 import '../abstract/abstract_usuarios.dart';
+import 'global.dart';
 
 class UsuarioRepository implements RepositoryUsuarios {
-  final String dataURL = "https://10.0.2.2:44367/api/Usuarios/";
+  final String dataURL = "${Global.dataURL}Usuarios/";
   @override
   Future<String> deleteUsuario(Usuarios usuarios) {
     // TODO: implement deleteUsuario
@@ -30,7 +31,7 @@ class UsuarioRepository implements RepositoryUsuarios {
 
   @override
   Future<Usuarios> getUsuario(Usuarios usuarios) async {
-    var url = Uri.parse('$dataURL${usuarios.id}');
+    var url = Uri.parse('$dataURL${usuarios.uidFire}');
     print("print get: $url");
     var response = await http.get(url);
     print("status code: ${response.statusCode}");

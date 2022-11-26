@@ -1,23 +1,18 @@
 class Usuarios {
+  String? uidFire;
   String? username;
-  int? id;
-  String? email;
-  String? password;
 
-  Usuarios({this.username, this.id, this.email, this.password});
+  Usuarios({this.uidFire, this.username});
 
   Usuarios.fromJson(Map<String, dynamic> json) {
+    uidFire = json['uidFire'];
     username = json['username'];
-    id = json['id'];
-    email = json['email'];
-    password = json['password'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['uidFire'] = uidFire.toString();
     data['username'] = username.toString();
-    data['email'] = email.toString();
-    data['password'] = password.toString();
     return data;
   }
 }
