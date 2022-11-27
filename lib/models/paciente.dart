@@ -1,28 +1,36 @@
-class Doctor {
+class Paciente {
   int? id;
   String? userId;
-  String? espacialidad;
+  String? nacimiento;
+  bool? genero;
+  String? tipoSangre;
   String? nombre;
   String? apellidos;
 
-  Doctor(
+  Paciente(
       {this.id,
-      required this.userId,
-      required this.espacialidad,
-      required this.nombre,
-      required this.apellidos});
+      this.userId,
+      this.nacimiento,
+      this.genero,
+      this.tipoSangre,
+      this.nombre,
+      this.apellidos});
 
-  Doctor.fromJson(Map<String, dynamic> json) {
+  Paciente.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['userId'];
-    espacialidad = json['espacialidad'];
+    nacimiento = json['nacimiento'];
+    genero = json['genero'];
+    tipoSangre = json['tipoSangre'];
     nombre = json['nombre'];
     apellidos = json['apellidos'];
   }
 
-  Doctor.fromJsonCustom(Map<String, dynamic> json) {
+  Paciente.fromJsonCustom(Map<String, dynamic> json) {
     userId = json['userId'];
-    espacialidad = json['espacialidad'];
+    nacimiento = json['nacimiento'];
+    genero = json['genero'];
+    tipoSangre = json['tipoSangre'];
     nombre = json['nombre'];
     apellidos = json['apellidos'];
   }
@@ -31,7 +39,9 @@ class Doctor {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id!.toInt();
     data['userId'] = userId.toString();
-    data['espacialidad'] = espacialidad.toString();
+    data['nacimiento'] = nacimiento.toString();
+    data['genero'] = genero as bool;
+    data['tipoSangre'] = tipoSangre.toString();
     data['nombre'] = nombre.toString();
     data['apellidos'] = apellidos.toString();
     return data;
@@ -40,7 +50,9 @@ class Doctor {
   Map<String, dynamic> toJsonCustom() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['userId'] = userId.toString();
-    data['espacialidad'] = espacialidad.toString();
+    data['nacimiento'] = nacimiento.toString();
+    data['genero'] = genero as bool;
+    data['tipoSangre'] = tipoSangre.toString();
     data['nombre'] = nombre.toString();
     data['apellidos'] = apellidos.toString();
     return data;

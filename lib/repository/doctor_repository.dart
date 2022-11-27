@@ -14,8 +14,6 @@ class DoctorRepository implements RepositoryDoctor {
     http.Response deleteResponse = await client.delete(
       Uri.parse('$dataURL${doctor.id}'),
     );
-    print(
-        "Estatus code resp ${deleteResponse.statusCode} con user id: ${doctor.userId} en la url $dataURL${doctor.id}");
     if (deleteResponse.statusCode == 200) {
       return "Doctor eliminado exitosamente.";
     } else {
@@ -54,17 +52,12 @@ class DoctorRepository implements RepositoryDoctor {
   @override
   Future<Doctor> postDoctor(Doctor doctor) async {
     Doctor? doctorCreado;
-    Map doctorData = {
-      'userId': doctor.userId,
-      'espacialidad': doctor.espacialidad,
-      'nombre': doctor.nombre,
-      'apellidos': doctor.apellidos
-    };
+
     http.Response postResponse = await client.post(Uri.parse(dataURL),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(doctorData));
+        body: jsonEncode(doctor.toJsonCustom()));
     if (postResponse.statusCode == 201) {
       doctorCreado = Doctor.fromJsonCustom(jsonDecode(postResponse.body));
       return doctorCreado;
@@ -76,20 +69,13 @@ class DoctorRepository implements RepositoryDoctor {
   @override
   Future<Doctor> putCompleted(Doctor doctor) async {
     Doctor? doctorCreado;
-    Map doctorData = {
-      'id': doctor.id,
-      'userId': doctor.userId,
-      'espacialidad': doctor.espacialidad,
-      'nombre': doctor.nombre,
-      'apellidos': doctor.apellidos
-    };
 
     http.Response putResponse = await client.put(
         Uri.parse('$dataURL${doctor.id}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(doctorData));
+        body: jsonEncode(doctor.toJson()));
 
     if (putResponse.statusCode == 201) {
       doctorCreado = Doctor.fromJson(jsonDecode(putResponse.body));

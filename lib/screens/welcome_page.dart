@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:doctor_app/controller/auth_controller.dart';
 import 'package:doctor_app/screens/doctors/doctor_page.dart';
+import 'package:doctor_app/screens/pacientes/paciente_page.dart';
 import 'package:doctor_app/screens/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -161,7 +162,11 @@ class NavigationDrawer extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.airline_seat_flat),
           title: const Text('Pacientes'),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PacientePage(userFire: userFire!),
+            ));
+          },
         ),
         const Divider(color: Colors.black54),
         ListTile(
