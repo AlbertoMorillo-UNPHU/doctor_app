@@ -1,5 +1,6 @@
 import 'package:doctor_app/controller/doctor_controller.dart';
 import 'package:doctor_app/repository/doctor_repository.dart';
+import 'package:doctor_app/screens/doctors/doctor_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,9 @@ import '../../widget/text_field_widget.dart';
 
 class EditDoctorPage extends StatefulWidget {
   final Doctor selectedDoctor;
-  const EditDoctorPage({Key? key, required this.selectedDoctor})
+  final User? userFire;
+  const EditDoctorPage(
+      {Key? key, required this.selectedDoctor, required this.userFire})
       : super(key: key);
 
   @override
@@ -107,6 +110,13 @@ class _EditDoctorPageState extends State<EditDoctorPage> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) => DoctorPage(
+                                            userFire: widget.userFire!),
+                                      ));
                                       editFormKey.currentState!.reset();
                                       nombreController.clear();
                                       especialidadController.clear();

@@ -38,7 +38,8 @@ class _AddDoctorPageState extends State<AddDoctorPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Creando doctor:'),
+        backgroundColor: Colors.grey[500],
+        title: const Text('Creando doctor'),
       ),
       body: Form(
         key: editFormKey,
@@ -106,7 +107,7 @@ class _AddDoctorPageState extends State<AddDoctorPage> {
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      Navigator.of(context).pop();
                                       editFormKey.currentState!.reset();
                                       nombreController.clear();
                                       especialidadController.clear();

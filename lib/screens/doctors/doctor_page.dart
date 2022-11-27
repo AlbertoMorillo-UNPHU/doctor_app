@@ -40,6 +40,7 @@ class _DoctorPageState extends State<DoctorPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Doctores'),
+        backgroundColor: Colors.grey[500],
         centerTitle: true,
         leading: IconButton(
             onPressed: () => Navigator.pop(
@@ -56,14 +57,12 @@ class _DoctorPageState extends State<DoctorPage> {
                   MaterialPageRoute(
                       builder: (context) => AddDoctorPage(
                             userFire: widget.userFire,
-                          ))),
+                          ))).then((value) => _refreshDoctor()),
               icon: const Icon(Icons.add)),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
             onPressed: () => setState(() {
-              print("Refrescar uid: ${widget.userFire.uid}");
-              futureDoctor =
-                  doctorController.fetchDoctorList(widget.userFire.uid);
+              _refreshDoctor();
             }),
           )
         ],
@@ -105,6 +104,7 @@ class _DoctorPageState extends State<DoctorPage> {
                               data: data,
                               doctorController: doctorController,
                               position: index,
+                              userFire: widget.userFire,
                             ),
                           ],
                         ),
@@ -120,5 +120,11 @@ class _DoctorPageState extends State<DoctorPage> {
         },
       ),
     );
+  }
+
+  _refreshDoctor() {
+    setState(() {
+      futureDoctor = doctorController.fetchDoctorList(widget.userFire.uid);
+    });
   }
 }

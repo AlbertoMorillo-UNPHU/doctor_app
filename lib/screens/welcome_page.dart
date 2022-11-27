@@ -19,7 +19,7 @@ class WelcomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menú Principal"),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.grey[500],
       ),
       drawer: NavigationDrawer(userFire: userFire),
       backgroundColor: Colors.white,
@@ -137,8 +137,7 @@ class NavigationDrawer extends StatelessWidget {
                 height: 12,
               ),
               Text(username,
-                  style:
-                      const TextStyle(fontSize: 16, color: Colors.orangeAccent))
+                  style: TextStyle(fontSize: 16, color: Colors.green[500]))
             ],
           ),
         ),
