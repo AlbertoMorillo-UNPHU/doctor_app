@@ -20,7 +20,7 @@ class DoctorDetailWidget extends StatelessWidget {
         Icon(
           propIcon,
           size: 15.0,
-          color: Colors.orange.shade900,
+          color: Colors.blue.shade900,
         ),
         const SizedBox(width: 5.0),
         Text(

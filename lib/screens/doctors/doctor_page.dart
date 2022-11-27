@@ -26,7 +26,7 @@ class _DoctorPageState extends State<DoctorPage> {
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0);
 
   TextStyle propStyle =
-      TextStyle(color: Colors.brown[900], fontWeight: FontWeight.bold);
+      const TextStyle(color: Colors.black, fontWeight: FontWeight.bold);
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _DoctorPageState extends State<DoctorPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Doctores'),
-        backgroundColor: Colors.grey[500],
+        backgroundColor: Colors.blue[500],
         centerTitle: true,
         leading: IconButton(
             onPressed: () => Navigator.pop(
@@ -88,7 +88,7 @@ class _DoctorPageState extends State<DoctorPage> {
                   itemBuilder: (context, index) {
                     return Card(
                       margin: const EdgeInsets.all(10),
-                      color: Colors.orange.shade100,
+                      color: Colors.blue[50],
                       child: Padding(
                         padding:
                             const EdgeInsets.only(left: 10, top: 5, bottom: 5),

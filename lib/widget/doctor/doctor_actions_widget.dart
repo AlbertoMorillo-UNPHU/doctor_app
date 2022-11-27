@@ -92,7 +92,7 @@ class _DoctorActionsWidgetState extends State<DoctorActionsWidget> {
                     ],
                   );
                 }),
-            child: Icon(Icons.delete, color: Colors.red[900]),
+            child: Icon(Icons.delete, color: Colors.blue.shade500),
           ),
         ],
       ),

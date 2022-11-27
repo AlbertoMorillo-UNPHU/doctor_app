@@ -28,7 +28,7 @@ class DoctorDataWidget extends StatelessWidget {
         ),
         const SizedBox(height: 5.0),
         DoctorDetailWidget(
-            propIcon: Icons.category_rounded,
+            propIcon: Icons.medical_information,
             propTitle: 'Especialidad: ',
             propDetail: data[position].espacialidad!,
             propStyle: propStyle),
@@ -40,7 +40,7 @@ class DoctorDataWidget extends StatelessWidget {
             propStyle: propStyle),
         const SizedBox(height: 5.0),
         DoctorDetailWidget(
-            propIcon: Icons.monetization_on,
+            propIcon: Icons.person,
             propTitle: 'Apellidos: ',
             propDetail: '${data[position].apellidos}',
             propStyle: propStyle),
