@@ -1,30 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/paciente_controller.dart';
-import '../../models/paciente.dart';
-import '../../screens/pacientes/edit_paciente_page.dart';
-import '../../screens/pacientes/paciente_page.dart';
+import '../../controller/cita_controller.dart';
+import '../../models/cita.dart';
+import '../../screens/citas/edit_Cita_page.dart';
+import '../../screens/citas/cita_page.dart';
 import '../alert_widget.dart';
 
-class PacienteActionsWidget extends StatefulWidget {
-  final List<Paciente> data;
-  final PacienteController pacienteController;
+class CitaActionsWidget extends StatefulWidget {
+  final List<Cita> data;
+  final CitaController citaController;
   final int position;
   final User? userFire;
-  const PacienteActionsWidget(
+  const CitaActionsWidget(
       {Key? key,
       required this.data,
-      required this.pacienteController,
+      required this.citaController,
       required this.position,
       this.userFire})
       : super(key: key);
 
   @override
-  State<PacienteActionsWidget> createState() => _PacienteActionsWidgetState();
+  State<CitaActionsWidget> createState() => _CitaActionsWidgetState();
 }
 
-class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
+class _CitaActionsWidgetState extends State<CitaActionsWidget> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -35,8 +35,8 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                    builder: (context) => EditPacientePage(
-                        selectedPaciente: widget.data[widget.position],
+                    builder: (context) => EditCitaPage(
+                        selectedCita: widget.data[widget.position],
                         userFire: widget.userFire!),
                   ))
                   .then((value) => _refreshPage());
@@ -48,22 +48,22 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
                 context: context,
                 builder: (context) {
                   return AlertWidget(
-                    title: 'Esta seguro de borrar este paciente?',
+                    title: 'Esta seguro de borrar este Cita?',
                     content: '',
                     actions: [
                       TextButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          String result = await widget.pacienteController
-                              .deletePaciente(widget.data[widget.position]);
+                          String result = await widget.citaController
+                              .deleteCita(widget.data[widget.position]);
                           if (result.isNotEmpty) {
                             showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertWidget(
-                                    title: 'Paciente eliminado con éxito.',
+                                    title: 'Cita eliminado con éxito.',
                                     content:
-                                        'El paciente se eliminó satisfactoriamente.',
+                                        'El Cita se eliminó satisfactoriamente.',
                                     actions: [
                                       TextButton(
                                         onPressed: () {
@@ -71,7 +71,7 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
                                           Navigator.pop(context);
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => PacientePage(
+                                            builder: (context) => CitaPage(
                                                 userFire: widget.userFire!),
                                           ));
                                         },
@@ -100,7 +100,7 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
 
   _refreshPage() {
     setState(() {
-      widget.pacienteController.fetchPacienteList(widget.userFire!.uid);
+      widget.citaController.fetchCitaList(widget.userFire!.uid);
     });
   }
 }

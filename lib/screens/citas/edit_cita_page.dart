@@ -1,56 +1,64 @@
+import 'package:doctor_app/screens/Citas/Cita_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/paciente_controller.dart';
+import '../../controller/cita_controller.dart';
+import '../../models/Cita.dart';
+import '../../models/doctor.dart';
 import '../../models/paciente.dart';
-import '../../repository/paciente_repository.dart';
+import '../../repository/Cita_repository.dart';
 import '../../widget/alert_widget.dart';
 import '../../widget/radio_button_widget.dart';
 import '../../widget/text_field_date_widget.dart';
 import '../../widget/text_field_widget.dart';
 
-class AddPacientePage extends StatefulWidget {
+class EditCitaPage extends StatefulWidget {
+  final Cita selectedCita;
   final User? userFire;
-  const AddPacientePage({Key? key, required this.userFire}) : super(key: key);
+  const EditCitaPage({Key? key, required this.selectedCita, this.userFire})
+      : super(key: key);
 
   @override
-  State<AddPacientePage> createState() => _AddPacientePageState();
+  State<EditCitaPage> createState() => _EditCitaPageState();
 }
 
-class _AddPacientePageState extends State<AddPacientePage> {
+class _EditCitaPageState extends State<EditCitaPage> {
   GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
-  bool? genero = true;
-  TextEditingController tipoSangreController = TextEditingController();
-  TextEditingController nacimientoController = TextEditingController();
-  TextEditingController nombreController = TextEditingController();
-  TextEditingController apellidosController = TextEditingController();
-  PacienteController pacienteController =
-      PacienteController(PacienteRepository());
+  int? pacienteId;
+  int? doctorId;
+  TextEditingController cita1Controller = TextEditingController();
+  List<Doctor> apiDoctores = [];
+  List<Paciente> apiPacientes = [];
+  CitaController citaController = CitaController(CitaRepository());
+
+    Future getPacientes() {
+    Future<List<Paciente>> futurePacientes = citaController.getPaciente();
+    futurePacientes.then((list) {
+      setState(() => apiPacientes = list);
+    });
+    return futurePacientes;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
+    getPacientes();
+    cita1Controller.text = widget.selectedCita.cita1!;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[500],
-        title: const Text('Creando paciente'),
+        title: Text(
+            'Editando Cita: ${widget.selectedCita.doctorId} ${widget.selectedCita.pacienteId}'),
       ),
-      body: Form(
-        key: editFormKey,
-        child: Padding(
-          padding: const EdgeInsets.all(30.0),
-          child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Form(
+          key: editFormKey,
+          child: Padding(
+            padding: const EdgeInsets.all(30.0),
             child: Column(
               children: [
                 TextFieldDateWidget(
@@ -68,6 +76,7 @@ class _AddPacientePageState extends State<AddPacientePage> {
                   onChanged: (val) => genero = val,
                   labelText1: 'Hombre',
                   labelText2: 'Mujer',
+                  generoSelected: genero,
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -115,26 +124,33 @@ class _AddPacientePageState extends State<AddPacientePage> {
                       )),
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
-                      Paciente createdPaciente =
-                          await pacienteController.postPaciente(Paciente(
-                              userId: widget.userFire!.uid,
-                              nacimiento: nacimientoController.text,
-                              genero: genero,
-                              tipoSangre: tipoSangreController.text,
-                              nombre: nombreController.text,
-                              apellidos: apellidosController.text));
-                      if (createdPaciente.apellidos!.isNotEmpty) {
+                      Cita createdCita = await citaController.putCita(Cita(
+                          id: widget.selectedCita.id,
+                          userId: widget.selectedCita.userId,
+                          nacimiento: nacimientoController.text,
+                          genero: genero,
+                          tipoSangre: tipoSangreController.text,
+                          nombre: nombreController.text,
+                          apellidos: apellidosController.text));
+                      if (createdCita.apellidos!.isNotEmpty) {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return AlertWidget(
-                                  title: 'Paciente creado con éxito',
+                                  title: 'Cita modificado con éxito',
                                   content:
-                                      'El paciente se ha creado exitosamente. Puede ir al menú principal y refrescar.',
+                                      'El Cita se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => CitaPage(
+                                              userFire: widget.userFire!),
+                                        ));
                                         editFormKey.currentState!.reset();
                                         nombreController.clear();
                                         nacimientoController.clear();

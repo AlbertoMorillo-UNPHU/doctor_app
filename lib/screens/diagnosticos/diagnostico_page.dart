@@ -1,28 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/paciente_controller.dart';
-import '../../models/paciente.dart';
-import '../../repository/paciente_repository.dart';
+import '../../controller/diagnostico_controller.dart';
+import '../../models/diagnostico.dart';
+import '../../repository/diagnostico_repository.dart';
 import '../../widget/info_widget.dart';
-import '../../widget/paciente/paciente_actions_widget.dart';
-import '../../widget/paciente/paciente_data_widget.dart';
+import '../../widget/diagnostico/diagnostico_actions_widget.dart';
+import '../../widget/diagnostico/diagnostico_data_widget.dart';
 import '../welcome_page.dart';
-import 'add_paciente_page.dart';
+import 'add_diagnostico_page.dart';
 
-class PacientePage extends StatefulWidget {
+class DiagnosticoPage extends StatefulWidget {
   final User userFire;
-  const PacientePage({Key? key, required this.userFire}) : super(key: key);
+  const DiagnosticoPage({Key? key, required this.userFire}) : super(key: key);
 
   @override
-  State<PacientePage> createState() => _PacientePageState();
+  State<DiagnosticoPage> createState() => _DiagnosticoPageState();
 }
 
-class _PacientePageState extends State<PacientePage> {
-  List<Paciente> apiPaciente = [];
-  PacienteController pacienteController =
-      PacienteController(PacienteRepository());
-  late Future<List<Paciente>> futurePaciente;
+class _DiagnosticoPageState extends State<DiagnosticoPage> {
+  List<Diagnostico> apiDiagnostico = [];
+  DiagnosticoController diagnosticoController =
+      DiagnosticoController(DiagnosticoRepository());
+  late Future<List<Diagnostico>> futureDiagnostico;
   TextStyle titleStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0);
 
@@ -33,14 +33,14 @@ class _PacientePageState extends State<PacientePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    futurePaciente = pacienteController.fetchPacienteList(widget.userFire.uid);
+    futureDiagnostico = diagnosticoController.fetchDiagnosticoList(widget.userFire.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pacientes'),
+        title: const Text('Diagnosticos'),
         backgroundColor: Colors.blue[500],
         centerTitle: true,
         leading: IconButton(
@@ -56,20 +56,20 @@ class _PacientePageState extends State<PacientePage> {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddPacientePage(
+                      builder: (context) => AddDiagnosticoPage(
                             userFire: widget.userFire,
-                          ))).then((value) => _refreshPaciente()),
+                          ))).then((value) => _refreshDiagnostico()),
               icon: const Icon(Icons.add)),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
             onPressed: () => setState(() {
-              _refreshPaciente();
+              _refreshDiagnostico();
             }),
           )
         ],
       ),
-      body: FutureBuilder<List<Paciente>>(
-        future: futurePaciente,
+      body: FutureBuilder<List<Diagnostico>>(
+        future: futureDiagnostico,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -82,7 +82,7 @@ class _PacientePageState extends State<PacientePage> {
                 final error = "${snapshot.error}";
                 return InfoWidget(info: error, color: Colors.red);
               } else if (snapshot.data!.isNotEmpty) {
-                List<Paciente> data = snapshot.data!;
+                List<Diagnostico> data = snapshot.data!;
 
                 return ListView.builder(
                   itemCount: data.length,
@@ -95,15 +95,15 @@ class _PacientePageState extends State<PacientePage> {
                             const EdgeInsets.only(left: 10, top: 5, bottom: 5),
                         child: Row(
                           children: [
-                            PacienteDataWidget(
+                            DiagnosticoDataWidget(
                               data: data,
                               titleStyle: titleStyle,
                               propStyle: propStyle,
                               position: index,
                             ),
-                            PacienteActionsWidget(
+                            DiagnosticoActionsWidget(
                               data: data,
-                              pacienteController: pacienteController,
+                              DiagnosticoController: DiagnosticoController,
                               position: index,
                               userFire: widget.userFire,
                             ),
@@ -115,7 +115,7 @@ class _PacientePageState extends State<PacientePage> {
                 );
               } else {
                 return const InfoWidget(
-                    info: "No hay pacientees disponibles", color: Colors.red);
+                    info: "No hay Diagnosticoes disponibles", color: Colors.red);
               }
           }
         },
@@ -123,10 +123,10 @@ class _PacientePageState extends State<PacientePage> {
     );
   }
 
-  _refreshPaciente() {
+  _refreshDiagnostico() {
     setState(() {
-      futurePaciente =
-          pacienteController.fetchPacienteList(widget.userFire.uid);
+      futureDiagnostico =
+          diagnosticoController.fetchDiagnosticoList(widget.userFire.uid);
     });
   }
 }

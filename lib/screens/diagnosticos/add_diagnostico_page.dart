@@ -1,59 +1,56 @@
-import 'package:doctor_app/screens/pacientes/paciente_page.dart';
+import 'package:doctor_app/models/doctor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/paciente_controller.dart';
-import '../../models/paciente.dart';
-import '../../repository/paciente_repository.dart';
+import '../../controller/diagnostico_controller.dart';
+import '../../models/diagnostico.dart';
+import '../../repository/diagnostico_repository.dart';
 import '../../widget/alert_widget.dart';
 import '../../widget/radio_button_widget.dart';
 import '../../widget/text_field_date_widget.dart';
 import '../../widget/text_field_widget.dart';
 
-class EditPacientePage extends StatefulWidget {
-  final Paciente selectedPaciente;
+class AddDiagnosticoPage extends StatefulWidget {
   final User? userFire;
-  const EditPacientePage(
-      {Key? key, required this.selectedPaciente, this.userFire})
-      : super(key: key);
+  const AddDiagnosticoPage({Key? key, required this.userFire}) : super(key: key);
 
   @override
-  State<EditPacientePage> createState() => _EditPacientePageState();
+  State<AddDiagnosticoPage> createState() => _AddDiagnosticoPageState();
 }
 
-class _EditPacientePageState extends State<EditPacientePage> {
+class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
   GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
-  TextEditingController nacimientoController = TextEditingController();
   TextEditingController tipoSangreController = TextEditingController();
+  TextEditingController nacimientoController = TextEditingController();
   TextEditingController nombreController = TextEditingController();
   TextEditingController apellidosController = TextEditingController();
-  bool? genero;
-  PacienteController pacienteController =
-      PacienteController(PacienteRepository());
+  DiagnosticoController diagnosticoController =
+      DiagnosticoController(DiagnosticoRepository());
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    tipoSangreController.text = widget.selectedPaciente.tipoSangre!;
-    nombreController.text = widget.selectedPaciente.nombre!;
-    apellidosController.text = widget.selectedPaciente.apellidos!;
-    nacimientoController.text = widget.selectedPaciente.nacimiento!;
-    genero = widget.selectedPaciente.genero;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Editando paciente: ${widget.selectedPaciente.nombre} ${widget.selectedPaciente.apellidos}'),
+        backgroundColor: Colors.grey[500],
+        title: const Text('Creando Diagnostico'),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: editFormKey,
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
+      body: Form(
+        key: editFormKey,
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: SingleChildScrollView(
             child: Column(
               children: [
                 TextFieldDateWidget(
@@ -67,12 +64,11 @@ class _EditPacientePageState extends State<EditPacientePage> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                RadioButtonWidget(
-                  onChanged: (val) => genero = val,
-                  labelText1: 'Hombre',
-                  labelText2: 'Mujer',
-                  generoSelected: genero,
-                ),
+                // RadioButtonWidget(
+                //   onChanged: (),
+                //   labelText1: 'Hombre',
+                //   labelText2: 'Mujer',
+                // ),
                 const SizedBox(
                   height: 20.0,
                 ),
@@ -119,34 +115,26 @@ class _EditPacientePageState extends State<EditPacientePage> {
                       )),
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
-                      Paciente createdPaciente =
-                          await pacienteController.putPaciente(Paciente(
-                              id: widget.selectedPaciente.id,
-                              userId: widget.selectedPaciente.userId,
+                      Diagnostico createdDiagnostico =
+                          await diagnosticoController.postDiagnostico(Diagnostico(
+                              userId: widget.userFire!.uid,
                               nacimiento: nacimientoController.text,
                               genero: genero,
                               tipoSangre: tipoSangreController.text,
                               nombre: nombreController.text,
                               apellidos: apellidosController.text));
-                      if (createdPaciente.apellidos!.isNotEmpty) {
+                      if (createdDiagnostico.apellidos!.isNotEmpty) {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return AlertWidget(
-                                  title: 'Paciente modificado con éxito',
+                                  title: 'Diagnostico creado con éxito',
                                   content:
-                                      'El paciente se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
+                                      'El Diagnostico se ha creado exitosamente. Puede ir al menú principal y refrescar.',
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) => PacientePage(
-                                              userFire: widget.userFire!),
-                                        ));
+                                        Navigator.of(context).pop();
                                         editFormKey.currentState!.reset();
                                         nombreController.clear();
                                         nacimientoController.clear();

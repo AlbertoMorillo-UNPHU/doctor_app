@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class PacienteDetailWidget extends StatelessWidget {
+class CitaDetailWidget extends StatelessWidget {
   final IconData propIcon;
   final String propTitle;
   final String propDetail;
   final TextStyle propStyle;
-  const PacienteDetailWidget(
+  const CitaDetailWidget(
       {Key? key,
       required this.propIcon,
       required this.propTitle,

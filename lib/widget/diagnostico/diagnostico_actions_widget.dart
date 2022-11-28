@@ -1,30 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/paciente_controller.dart';
-import '../../models/paciente.dart';
-import '../../screens/pacientes/edit_paciente_page.dart';
-import '../../screens/pacientes/paciente_page.dart';
+import '../../controller/diagnostico_controller.dart';
+import '../../models/diagnostico.dart';
+import '../../screens/diagnosticos/edit_diagnostico_page.dart';
+import '../../screens/diagnosticos/diagnostico_page.dart';
 import '../alert_widget.dart';
 
-class PacienteActionsWidget extends StatefulWidget {
-  final List<Paciente> data;
-  final PacienteController pacienteController;
+class DiagnosticoActionsWidget extends StatefulWidget {
+  final List<Diagnostico> data;
+  final DiagnosticoController diagnosticoController;
   final int position;
   final User? userFire;
-  const PacienteActionsWidget(
+  const DiagnosticoActionsWidget(
       {Key? key,
       required this.data,
-      required this.pacienteController,
+      required this.diagnosticoController,
       required this.position,
       this.userFire})
       : super(key: key);
 
   @override
-  State<PacienteActionsWidget> createState() => _PacienteActionsWidgetState();
+  State<DiagnosticoActionsWidget> createState() => _DiagnosticoActionsWidgetState();
 }
 
-class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
+class _DiagnosticoActionsWidgetState extends State<DiagnosticoActionsWidget> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -35,8 +35,8 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(
-                    builder: (context) => EditPacientePage(
-                        selectedPaciente: widget.data[widget.position],
+                    builder: (context) => EditDiagnosticoPage(
+                        selectedDiagnostico: widget.data[widget.position],
                         userFire: widget.userFire!),
                   ))
                   .then((value) => _refreshPage());
@@ -48,22 +48,22 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
                 context: context,
                 builder: (context) {
                   return AlertWidget(
-                    title: 'Esta seguro de borrar este paciente?',
+                    title: 'Esta seguro de borrar este Diagnostico?',
                     content: '',
                     actions: [
                       TextButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          String result = await widget.pacienteController
-                              .deletePaciente(widget.data[widget.position]);
+                          String result = await widget.diagnosticoController
+                              .deleteDiagnostico(widget.data[widget.position]);
                           if (result.isNotEmpty) {
                             showDialog(
                                 context: context,
                                 builder: (context) {
                                   return AlertWidget(
-                                    title: 'Paciente eliminado con éxito.',
+                                    title: 'Diagnostico eliminado con éxito.',
                                     content:
-                                        'El paciente se eliminó satisfactoriamente.',
+                                        'El Diagnostico se eliminó satisfactoriamente.',
                                     actions: [
                                       TextButton(
                                         onPressed: () {
@@ -71,7 +71,7 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
                                           Navigator.pop(context);
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => PacientePage(
+                                            builder: (context) => DiagnosticoPage(
                                                 userFire: widget.userFire!),
                                           ));
                                         },
@@ -100,7 +100,7 @@ class _PacienteActionsWidgetState extends State<PacienteActionsWidget> {
 
   _refreshPage() {
     setState(() {
-      widget.pacienteController.fetchPacienteList(widget.userFire!.uid);
+      widget.diagnosticoController.fetchDiagnosticoList(widget.userFire!.uid);
     });
   }
 }

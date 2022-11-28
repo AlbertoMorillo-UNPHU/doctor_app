@@ -1,28 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../controller/paciente_controller.dart';
-import '../../models/paciente.dart';
-import '../../repository/paciente_repository.dart';
+import '../../controller/cita_controller.dart';
+import '../../models/Cita.dart';
+import '../../repository/Cita_repository.dart';
 import '../../widget/info_widget.dart';
-import '../../widget/paciente/paciente_actions_widget.dart';
-import '../../widget/paciente/paciente_data_widget.dart';
+import '../../widget/cita/cita_actions_widget.dart';
+import '../../widget/cita/cita_data_widget.dart';
 import '../welcome_page.dart';
-import 'add_paciente_page.dart';
+import 'add_cita_page.dart';
 
-class PacientePage extends StatefulWidget {
+class CitaPage extends StatefulWidget {
   final User userFire;
-  const PacientePage({Key? key, required this.userFire}) : super(key: key);
+  const CitaPage({Key? key, required this.userFire}) : super(key: key);
 
   @override
-  State<PacientePage> createState() => _PacientePageState();
+  State<CitaPage> createState() => _CitaPageState();
 }
 
-class _PacientePageState extends State<PacientePage> {
-  List<Paciente> apiPaciente = [];
-  PacienteController pacienteController =
-      PacienteController(PacienteRepository());
-  late Future<List<Paciente>> futurePaciente;
+class _CitaPageState extends State<CitaPage> {
+  List<Cita> apiCita = [];
+  CitaController citaController =
+      CitaController(CitaRepository());
+  late Future<List<Cita>> futureCita;
   TextStyle titleStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0);
 
@@ -33,14 +33,14 @@ class _PacientePageState extends State<PacientePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    futurePaciente = pacienteController.fetchPacienteList(widget.userFire.uid);
+    futureCita = citaController.fetchCitaList(widget.userFire.uid);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pacientes'),
+        title: const Text('Citas'),
         backgroundColor: Colors.blue[500],
         centerTitle: true,
         leading: IconButton(
@@ -56,20 +56,20 @@ class _PacientePageState extends State<PacientePage> {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AddPacientePage(
+                      builder: (context) => AddCitaPage(
                             userFire: widget.userFire,
-                          ))).then((value) => _refreshPaciente()),
+                          ))).then((value) => _refreshCita()),
               icon: const Icon(Icons.add)),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
             onPressed: () => setState(() {
-              _refreshPaciente();
+              _refreshCita();
             }),
           )
         ],
       ),
-      body: FutureBuilder<List<Paciente>>(
-        future: futurePaciente,
+      body: FutureBuilder<List<Cita>>(
+        future: futureCita,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -82,7 +82,7 @@ class _PacientePageState extends State<PacientePage> {
                 final error = "${snapshot.error}";
                 return InfoWidget(info: error, color: Colors.red);
               } else if (snapshot.data!.isNotEmpty) {
-                List<Paciente> data = snapshot.data!;
+                List<Cita> data = snapshot.data!;
 
                 return ListView.builder(
                   itemCount: data.length,
@@ -95,15 +95,15 @@ class _PacientePageState extends State<PacientePage> {
                             const EdgeInsets.only(left: 10, top: 5, bottom: 5),
                         child: Row(
                           children: [
-                            PacienteDataWidget(
+                            CitaDataWidget(
                               data: data,
                               titleStyle: titleStyle,
                               propStyle: propStyle,
                               position: index,
                             ),
-                            PacienteActionsWidget(
+                            CitaActionsWidget(
                               data: data,
-                              pacienteController: pacienteController,
+                              CitaController: CitaController,
                               position: index,
                               userFire: widget.userFire,
                             ),
@@ -115,7 +115,7 @@ class _PacientePageState extends State<PacientePage> {
                 );
               } else {
                 return const InfoWidget(
-                    info: "No hay pacientees disponibles", color: Colors.red);
+                    info: "No hay Citaes disponibles", color: Colors.red);
               }
           }
         },
@@ -123,10 +123,10 @@ class _PacientePageState extends State<PacientePage> {
     );
   }
 
-  _refreshPaciente() {
+  _refreshCita() {
     setState(() {
-      futurePaciente =
-          pacienteController.fetchPacienteList(widget.userFire.uid);
+      futureCita =
+          citaController.fetchCitaList(widget.userFire.uid);
     });
   }
 }

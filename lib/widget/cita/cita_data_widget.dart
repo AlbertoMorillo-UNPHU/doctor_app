@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../models/paciente.dart';
-import 'paciente_detail_widget.dart';
+import '../../models/cita.dart';
+import 'cita_detail_widget.dart';
 
-class PacienteDataWidget extends StatelessWidget {
-  const PacienteDataWidget({
+class CitaDataWidget extends StatelessWidget {
+  const CitaDataWidget({
     Key? key,
     required this.data,
     required this.titleStyle,
@@ -12,7 +12,7 @@ class PacienteDataWidget extends StatelessWidget {
     required this.position,
   }) : super(key: key);
 
-  final List<Paciente> data;
+  final List<Cita> data;
   final TextStyle titleStyle;
   final TextStyle propStyle;
   final int position;
@@ -23,26 +23,26 @@ class PacienteDataWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "${data[position].nombre!} ${data[position].apellidos!}",
+          "${data[position].doctorId!} ${data[position].pacienteId!}",
           style: titleStyle,
         ),
         const SizedBox(height: 5.0),
-        PacienteDetailWidget(
+        CitaDetailWidget(
             propIcon: Icons.bloodtype,
             propTitle: 'Tipo Sangre: ',
-            propDetail: data[position].tipoSangre!,
+            propDetail: data[position].cita1!,
             propStyle: propStyle),
         const SizedBox(height: 5.0),
-        PacienteDetailWidget(
+        CitaDetailWidget(
             propIcon: Icons.person,
             propTitle: 'Nombre: ',
-            propDetail: data[position].nombre!,
+            propDetail: data[position].cita1!,
             propStyle: propStyle),
         const SizedBox(height: 5.0),
-        PacienteDetailWidget(
+        CitaDetailWidget(
             propIcon: Icons.person,
             propTitle: 'Apellidos: ',
-            propDetail: '${data[position].apellidos}',
+            propDetail: '${data[position].cita1}',
             propStyle: propStyle),
       ],
     );
