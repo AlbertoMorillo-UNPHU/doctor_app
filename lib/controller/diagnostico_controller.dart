@@ -1,6 +1,6 @@
 import 'package:doctor_app/models/diagnostico.dart';
 
-import '../abstract/abstract_diagnosticos.dart';
+import '../abstract/abstract_diagnostico.dart';
 
 class DiagnosticoController {
   final RepositoryDiagnostico _diagnosticoRepository;
@@ -8,7 +8,7 @@ class DiagnosticoController {
   DiagnosticoController(this._diagnosticoRepository);
 
   Future<List<Diagnostico>> fetchDiagnosticoList(String id) async {
-    return _diagnosticoRepository.getAllDiagnosticos(id);
+    return _diagnosticoRepository.getDiagnosticoList(id);
   }
 
   Future<Diagnostico> postDiagnostico(Diagnostico diagnostico) async {
@@ -20,7 +20,7 @@ class DiagnosticoController {
   }
 
   Future<Diagnostico> putDiagnostico(Diagnostico diagnostico) async {
-    return _diagnosticoRepository.putDiagnostico(diagnostico);
+    return _diagnosticoRepository.putCompleted(diagnostico);
   }
 
   Future<String> deleteDiagnostico(Diagnostico diagnostico) async {

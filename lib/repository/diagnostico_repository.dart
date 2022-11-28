@@ -1,91 +1,91 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../abstract/abstract_paciente.dart';
-import '../models/paciente.dart';
+import '../abstract/abstract_diagnostico.dart';
+import '../models/diagnostico.dart';
 import 'global.dart';
 
-String dataURL = "${Global.dataURL}Pacientes/";
+String dataURL = "${Global.dataURL}Diagnosticos/";
 
-class PacienteRepository implements RepositoryPaciente {
+class DiagnosticoRepository implements RepositoryDiagnostico {
   http.Client client = http.Client();
   @override
-  Future<String> deletedPaciente(Paciente paciente) async {
+  Future<String> deletedDiagnostico(Diagnostico diagnostico) async {
     http.Response deleteResponse = await client.delete(
-      Uri.parse('$dataURL${paciente.id}'),
+      Uri.parse('$dataURL${diagnostico.id}'),
     );
 
     if (deleteResponse.statusCode == 200) {
-      return "Paciente eliminado exitosamente.";
+      return "Diagnostico eliminado exitosamente.";
     } else {
-      throw "Error al eliminar al paciente";
+      throw "Error al eliminar el diagnostico";
     }
   }
 
   @override
-  Future<Paciente> getPaciente(Paciente paciente) {
-    // TODO: implement getPaciente
+  Future<Diagnostico> getDiagnostico(Diagnostico diagnostico) {
+    // TODO: implement getDiagnostico
     throw UnimplementedError();
   }
 
   @override
-  Future<List<Paciente>> getPacienteList(String userId) async {
-    List<Paciente> parsedPaciente = [];
-    http.Response pacienteResponse =
-        await client.get(Uri.parse("$dataURL$userId"));
+  Future<List<Diagnostico>> getDiagnosticoList(String id) async {
+    List<Diagnostico> parsedDiagnostico = [];
+    http.Response diagnosticoResponse =
+        await client.get(Uri.parse("$dataURL$id"));
 
-    if (pacienteResponse.statusCode == 200) {
-      String jsonStringPaciente = pacienteResponse.body;
-      parsedPaciente = List<Paciente>.from(
-          json.decode(jsonStringPaciente).map((b) => Paciente.fromJson(b)));
-      return parsedPaciente;
+    if (diagnosticoResponse.statusCode == 200) {
+      String jsonStringDiagnostico = diagnosticoResponse.body;
+      parsedDiagnostico = List<Diagnostico>.from(
+          json.decode(jsonStringDiagnostico).map((b) => Diagnostico.fromJson(b)));
+      return parsedDiagnostico;
     } else {
-      throw "Error al cargar Pacientees del usuario";
+      throw "Error al cargar Diagnosticos del usuario";
     }
   }
 
   @override
-  Future<String> patchCompleted(Paciente paciente) {
+  Future<String> patchCompleted(Diagnostico diagnostico) {
     // TODO: implement patchCompleted
     throw UnimplementedError();
   }
 
   @override
-  Future<Paciente> postPaciente(Paciente paciente) async {
-    Paciente? pacienteCreado;
+  Future<Diagnostico> postDiagnostico(Diagnostico diagnostico) async {
+    Diagnostico? diagnosticoCreado;
 
     http.Response postResponse = await client.post(Uri.parse(dataURL),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(paciente.toJsonCustom()));
+        body: jsonEncode(diagnostico.toJsonCustom()));
 
     if (postResponse.statusCode == 201) {
-      pacienteCreado = Paciente.fromJson(jsonDecode(postResponse.body));
-      return pacienteCreado;
+      diagnosticoCreado = Diagnostico.fromJson(jsonDecode(postResponse.body));
+      return diagnosticoCreado;
     } else {
-      throw "Error creando el paciente.";
+      throw "Error creando el Diagnostico.";
     }
   }
 
   @override
-  Future<Paciente> putCompleted(Paciente paciente) async {
-    Paciente? pacienteCreado;
+  Future<Diagnostico> putCompleted(Diagnostico diagnostico) async {
+    Diagnostico? diagnosticoCreado;
     print(
-        "${paciente.id} ${paciente.apellidos} ${paciente.genero} ${paciente.nacimiento} ${paciente.nombre} ${paciente.tipoSangre} ${paciente.userId}");
+        "${diagnostico.id} ${diagnostico.pacienteId} ${diagnostico.doctorId} ${diagnostico.fechaDiagnostico} ${diagnostico.diagnosticoDesc}");
     http.Response putResponse = await client.put(
-        Uri.parse('$dataURL${paciente.id}'),
+        Uri.parse('$dataURL${diagnostico.id}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(paciente.toJson()));
+        body: jsonEncode(diagnostico.toJson()));
     print(
-        "Logger status code: ${putResponse.statusCode} con URL: $dataURL y json: ${jsonEncode(paciente.toJsonCustom())}");
+        "Logger status code: ${putResponse.statusCode} con URL: $dataURL y json: ${jsonEncode(diagnostico.toJsonCustom())}");
     if (putResponse.statusCode == 201) {
-      pacienteCreado = Paciente.fromJson(jsonDecode(putResponse.body));
-      return pacienteCreado;
+      diagnosticoCreado = Diagnostico.fromJson(jsonDecode(putResponse.body));
+      return diagnosticoCreado;
     } else {
-      throw "Error modificando el paciente";
+      throw "Error modificando el Diagnostico";
     }
   }
 }

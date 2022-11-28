@@ -2,7 +2,7 @@ import '../models/cita.dart';
 
 abstract class RepositoryCita {
   
-  Future<List<Cita>> getAllCitas(String id);
+  Future<List<Cita>> getCitaList(String id);
   Future<String> patchCompleted(Cita cita);
   Future<Cita> putCompleted(Cita cita);
   Future<String> deletedCita(Cita cita);
