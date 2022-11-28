@@ -7,24 +7,24 @@ class DiagnosticoController {
 
   DiagnosticoController(this._diagnosticoRepository);
 
-  Future<List<Diagnostico>> fetchDiagnosticoList() async {
-    return _diagnosticoRepository.getAllDiagnosticos();
+  Future<List<Diagnostico>> fetchDiagnosticoList(String id) async {
+    return _diagnosticoRepository.getAllDiagnosticos(id);
   }
 
-  Future<String> postDiagnostico(Diagnostico diagnostico) async {
+  Future<Diagnostico> postDiagnostico(Diagnostico diagnostico) async {
     return _diagnosticoRepository.postDiagnostico(diagnostico);
   }
 
-  Future<String> getDiagnostico(Diagnostico diagnostico) async {
+  Future<Diagnostico> getDiagnostico(Diagnostico diagnostico) async {
     return _diagnosticoRepository.getDiagnostico(diagnostico);
   }
 
-  Future<String> putDiagnostico(Diagnostico diagnostico) async {
+  Future<Diagnostico> putDiagnostico(Diagnostico diagnostico) async {
     return _diagnosticoRepository.putDiagnostico(diagnostico);
   }
 
   Future<String> deleteDiagnostico(Diagnostico diagnostico) async {
-    return _diagnosticoRepository.deleteDiagnostico(diagnostico);
+    return _diagnosticoRepository.deletedDiagnostico(diagnostico);
 
     
   }
