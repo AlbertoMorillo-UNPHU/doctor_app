@@ -103,7 +103,7 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
                             ),
                             DiagnosticoActionsWidget(
                               data: data,
-                              DiagnosticoController: DiagnosticoController,
+                              diagnosticoController: diagnosticoController,
                               position: index,
                               userFire: widget.userFire,
                             ),

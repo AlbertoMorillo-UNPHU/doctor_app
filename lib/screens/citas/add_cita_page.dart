@@ -30,7 +30,7 @@ class _AddCitaPageState extends State<AddCitaPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    // TODO: implement initStated
     super.initState();
   }
 

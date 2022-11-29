@@ -23,7 +23,7 @@ class CitaDataWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "${data[position].doctorId!} ${data[position].pacienteId!}",
+          "${data[position].cita1}",
           style: titleStyle,
         ),
         const SizedBox(height: 5.0),

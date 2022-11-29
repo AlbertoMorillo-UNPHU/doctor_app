@@ -23,26 +23,26 @@ class DiagnosticoDataWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "${data[position].doctorId!} ${data[position].pacienteId!}",
+          "${data[position].diagnosticoDesc}",
           style: titleStyle,
         ),
         const SizedBox(height: 5.0),
         DiagnosticoDetailWidget(
-            propIcon: Icons.bloodtype,
-            propTitle: 'Tipo Sangre: ',
-            propDetail: data[position].diagnosticoDesc!,
+            propIcon: Icons.person,
+            propTitle: 'PacienteId: ',
+            propDetail: '${data[position].pacienteId}',
             propStyle: propStyle),
         const SizedBox(height: 5.0),
         DiagnosticoDetailWidget(
-            propIcon: Icons.person,
-            propTitle: 'Nombre: ',
-            propDetail: data[position].diagnosticoDesc!,
+            propIcon: Icons.health_and_safety,
+            propTitle: 'DoctorId: ',
+            propDetail: '${data[position].doctorId}',
             propStyle: propStyle),
         const SizedBox(height: 5.0),
         DiagnosticoDetailWidget(
-            propIcon: Icons.person,
-            propTitle: 'Apellidos: ',
-            propDetail: '${data[position].diagnosticoDesc}',
+            propIcon: Icons.note_rounded,
+            propTitle: 'Diagnostico: ',
+            propDetail: data[position].diagnosticoDesc!,
             propStyle: propStyle),
       ],
     );

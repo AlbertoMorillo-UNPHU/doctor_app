@@ -3,8 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/diagnostico_controller.dart';
+import '../../controller/doctor_controller.dart';
+import '../../controller/paciente_controller.dart';
 import '../../models/diagnostico.dart';
+import '../../models/doctor.dart';
+import '../../models/paciente.dart';
 import '../../repository/diagnostico_repository.dart';
+import '../../repository/doctor_repository.dart';
+import '../../repository/paciente_repository.dart';
 import '../../widget/alert_widget.dart';
 import '../../widget/radio_button_widget.dart';
 import '../../widget/text_field_date_widget.dart';
@@ -23,21 +29,47 @@ class EditDiagnosticoPage extends StatefulWidget {
 
 class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
   GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
-  TextEditingController nacimientoController = TextEditingController();
-  TextEditingController tipoSangreController = TextEditingController();
-  TextEditingController nombreController = TextEditingController();
-  TextEditingController apellidosController = TextEditingController();
+  int? pacienteId;
+  int? doctorId;
+  DateTime? fechaDiagnostico;
+  TextEditingController diagnosticoDescController = TextEditingController();
+  List<Doctor> apiDoctores = [];
+  List<Paciente> apiPacientes = [];
+  Paciente citaPaciente = Paciente();
+  //Doctor citaDoctor = Doctor();
+  //campos de doctor son requeridos
+  PacienteController pacienteController =
+      PacienteController(PacienteRepository());
+  DoctorController doctorController = DoctorController(DoctorRepository());
   DiagnosticoController diagnosticoController =
       DiagnosticoController(DiagnosticoRepository());
+
+  Future getPacientes() {
+    Future<List<Paciente>> futurePacientes =
+        pacienteController.fetchPacienteList(widget.userFire!.uid);
+    futurePacientes.then((list) {
+      setState(() => apiPacientes = list);
+    });
+    return futurePacientes;
+  }
+
+  Future getDoctores() {
+    Future<List<Doctor>> futureDoctores =
+        doctorController.fetchDoctorList(widget.userFire!.uid);
+    futureDoctores.then((list) {
+      setState(() => apiDoctores = list);
+    });
+    return futureDoctores;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    tipoSangreController.text = widget.selectedDiagnostico.diagnosticoDesc!;
-    nombreController.text = widget.selectedDiagnostico.diagnosticoDesc!;
-    apellidosController.text = widget.selectedDiagnostico.diagnosticoDesc!;
-    nacimientoController.text = widget.selectedDiagnostico.diagnosticoDesc!;
+    getPacientes();
+    getDoctores();
+    diagnosticoDescController.text =
+        widget.selectedDiagnostico.diagnosticoDesc!;
     // genero = widget.selectedDiagnostico.genero;
   }
 
@@ -46,7 +78,7 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Editando Diagnostico: ${widget.selectedDiagnostico.diagnosticoDesc} ${widget.selectedDiagnostico.apellidos}'),
+            'Editando Diagnostico: ${widget.selectedDiagnostico.diagnosticoDesc}'),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -55,55 +87,47 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
             padding: const EdgeInsets.all(30.0),
             child: Column(
               children: [
-                TextFieldDateWidget(
-                  controller: nacimientoController,
-                  hintText: 'Nacimiento',
-                  labelText: 'Nacimiento',
-                  isDense: true,
-                  inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Fecha Nacimiento es requerido',
-                ),
+                DropdownButtonFormField<Paciente>(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.category_outlined),
+                    ),
+                    hint: const Text('Paciente'),
+                    items: apiPacientes.map((pac) {
+                      return DropdownMenuItem(
+                        value: pac,
+                        child: Text(pac.nombre!),
+                      );
+                    }).toList(),
+                    onChanged: (value) => setState(() {
+                          pacienteId = value!.id;
+                        })),
                 const SizedBox(
                   height: 20.0,
                 ),
-                // RadioButtonWidget(
-                //   onChanged: (val) => genero = val,
-                //   labelText1: 'Hombre',
-                //   labelText2: 'Mujer',
-                //   generoSelected: genero,
-                // ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFieldWidget(
-                  controller: tipoSangreController,
-                  hintText: 'Tipo de Sangre',
-                  labelText: 'Tipo de Sangre',
-                  isDense: true,
-                  inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Tipo de Sangre es requerido',
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFieldWidget(
-                  controller: nombreController,
-                  hintText: 'Nombre',
-                  labelText: 'Nombre',
-                  isDense: true,
-                  inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Nombre es requerido.',
-                ),
+                DropdownButtonFormField<Doctor>(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.category_outlined),
+                    ),
+                    hint: const Text('Doctor'),
+                    items: apiDoctores.map((doc) {
+                      return DropdownMenuItem(
+                        value: doc,
+                        child: Text(doc.nombre!),
+                      );
+                    }).toList(),
+                    onChanged: (value) => setState(() {
+                          doctorId = value!.id;
+                        })),
                 const SizedBox(
                   height: 20.0,
                 ),
                 TextFieldWidget(
-                  controller: apellidosController,
-                  hintText: 'Apellidos',
-                  labelText: 'Apellidos',
+                  controller: diagnosticoDescController,
+                  hintText: 'Cita 1',
+                  labelText: 'Cita 1',
                   isDense: true,
                   inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Apellidos es requerido',
+                  requiredText: 'Cita 1',
                 ),
                 const SizedBox(
                   height: 30.0,
@@ -119,15 +143,14 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
                       Diagnostico createdDiagnostico =
-                          await diagnosticoController.putDiagnostico(Diagnostico(
-                              id: widget.selectedDiagnostico.id,
-                              userId: widget.selectedDiagnostico.userId,
-                              nacimiento: nacimientoController.text,
-                              genero: genero,
-                              tipoSangre: tipoSangreController.text,
-                              nombre: nombreController.text,
-                              apellidos: apellidosController.text));
-                      if (createdDiagnostico.apellidos!.isNotEmpty) {
+                          await diagnosticoController.putDiagnostico(
+                              Diagnostico(
+                                  id: widget.selectedDiagnostico.id,
+                                  pacienteId: pacienteId!,
+                                  doctorId: pacienteId!,
+                                  diagnosticoDesc:
+                                      diagnosticoDescController.text));
+                      if (createdDiagnostico.diagnosticoDesc!.isNotEmpty) {
                         showDialog(
                             context: context,
                             builder: (context) {
@@ -147,10 +170,7 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
                                               userFire: widget.userFire!),
                                         ));
                                         editFormKey.currentState!.reset();
-                                        nombreController.clear();
-                                        nacimientoController.clear();
-                                        tipoSangreController.clear();
-                                        apellidosController.clear();
+                                        diagnosticoDescController.clear();
                                       },
                                       child: const Text('OK'),
                                     ),
