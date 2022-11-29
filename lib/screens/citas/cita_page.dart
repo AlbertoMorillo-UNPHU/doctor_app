@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../../controller/cita_controller.dart';
 import '../../models/cita.dart';
 import '../../repository/cita_repository.dart';
+import '../../widget/alert_widget.dart';
+import '../../widget/delete_bg_item.dart';
 import '../../widget/info_widget.dart';
 import '../../widget/cita/cita_actions_widget.dart';
 import '../../widget/cita/cita_data_widget.dart';
@@ -86,27 +88,35 @@ class _CitaPageState extends State<CitaPage> {
                 return ListView.builder(
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      margin: const EdgeInsets.all(10),
-                      color: Colors.blue[50],
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-                        child: Row(
-                          children: [
-                            CitaDataWidget(
-                              data: data,
-                              titleStyle: titleStyle,
-                              propStyle: propStyle,
-                              position: index,
-                            ),
-                            CitaActionsWidget(
-                              data: data,
-                              citaController: citaController,
-                              position: index,
-                              userFire: widget.userFire,
-                            ),
-                          ],
+                    return Dismissible(
+                      key: Key(data[index].id.toString()),
+                      onDismissed: (direction) {
+                        _showSnackBar(context, data[index], index);
+                        _removeEntity(data[index]);
+                      },
+                      background: const DeleteBgItem(),
+                      child: Card(
+                        margin: const EdgeInsets.all(10),
+                        color: Colors.blue[50],
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, top: 5, bottom: 5),
+                          child: Row(
+                            children: [
+                              CitaDataWidget(
+                                data: data,
+                                titleStyle: titleStyle,
+                                propStyle: propStyle,
+                                position: index,
+                              ),
+                              CitaActionsWidget(
+                                data: data,
+                                citaController: citaController,
+                                position: index,
+                                userFire: widget.userFire,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -126,5 +136,39 @@ class _CitaPageState extends State<CitaPage> {
     setState(() {
       futureCita = citaController.fetchCitaList(widget.userFire.uid);
     });
+  }
+
+  void _showSnackBar(BuildContext context, Cita data, int index) {
+    SnackBar snackBar = SnackBar(
+        content: Text(
+            "Eliminaste cita de ${data.paciente!.nombre} ${data.paciente!.apellidos}"));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _removeEntity(Cita cita) async {
+    String result = await citaController.deleteCita(cita);
+    if (result.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertWidget(
+              title: 'Cita eliminado con éxito.',
+              content: 'El cita se eliminó satisfactoriamente.',
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          CitaPage(userFire: widget.userFire!),
+                    ));
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
+    }
   }
 }

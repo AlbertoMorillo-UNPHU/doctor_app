@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../../controller/tratamiento_controller.dart';
 import '../../models/tratamiento.dart';
 import '../../repository/tratamiento_repository.dart';
+import '../../widget/alert_widget.dart';
+import '../../widget/delete_bg_item.dart';
 import '../../widget/info_widget.dart';
 import '../../widget/tratamiento/tratamiento_actions_widget.dart';
 import '../../widget/tratamiento/tratamiento_data_widget.dart';
@@ -88,27 +90,35 @@ class _TratamientoPageState extends State<TratamientoPage> {
                 return ListView.builder(
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      margin: const EdgeInsets.all(10),
-                      color: Colors.blue[50],
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.only(left: 10, top: 5, bottom: 5),
-                        child: Row(
-                          children: [
-                            TratamientoDataWidget(
-                              data: data,
-                              titleStyle: titleStyle,
-                              propStyle: propStyle,
-                              position: index,
-                            ),
-                            TratamientoActionsWidget(
-                              data: data,
-                              tratamientoController: tratamientoController,
-                              position: index,
-                              userFire: widget.userFire,
-                            ),
-                          ],
+                    return Dismissible(
+                      key: Key(data[index].id.toString()),
+                      onDismissed: (direction) {
+                        _showSnackBar(context, data[index], index);
+                        _removeEntity(data[index]);
+                      },
+                      background: const DeleteBgItem(),
+                      child: Card(
+                        margin: const EdgeInsets.all(10),
+                        color: Colors.blue[50],
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 10, top: 5, bottom: 5),
+                          child: Row(
+                            children: [
+                              TratamientoDataWidget(
+                                data: data,
+                                titleStyle: titleStyle,
+                                propStyle: propStyle,
+                                position: index,
+                              ),
+                              TratamientoActionsWidget(
+                                data: data,
+                                tratamientoController: tratamientoController,
+                                position: index,
+                                userFire: widget.userFire,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -129,5 +139,38 @@ class _TratamientoPageState extends State<TratamientoPage> {
     setState(() {
       futureTratamiento = tratamientoController.fetchTratamientoList();
     });
+  }
+
+  void _showSnackBar(BuildContext context, Tratamiento data, int index) {
+    SnackBar snackBar =
+        SnackBar(content: Text("Eliminaste a ${data.tratamientoDesc}"));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  Future<void> _removeEntity(Tratamiento tratamiento) async {
+    String result = await tratamientoController.deleteTratamiento(tratamiento);
+    if (result.isNotEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertWidget(
+              title: 'Tratamiento eliminado con éxito.',
+              content: 'El tratamiento se eliminó satisfactoriamente.',
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          TratamientoPage(userFire: widget.userFire),
+                    ));
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
+    }
   }
 }
