@@ -16,14 +16,14 @@ class Diagnostico {
     id = json['id'];
     pacienteId = json['pacienteId'];
     doctorId = json['doctorId'];
-    fechaDiagnostico = json['fechaDiagnostico'];
+    fechaDiagnostico = json['fechaCreacion'];
     diagnosticoDesc = json['diagnosticoDesc'];
   }
 
-    Diagnostico.fromJsonCustom(Map<String, dynamic> json) {
+  Diagnostico.fromJsonCustom(Map<String, dynamic> json) {
     pacienteId = json['pacienteId'];
     doctorId = json['doctorId'];
-    fechaDiagnostico = json['fechaDiagnostico'];
+    fechaDiagnostico = json['fechaCreacion'];
     diagnosticoDesc = json['diagnosticoDesc'];
   }
 
@@ -32,7 +32,7 @@ class Diagnostico {
     data['id'] = id;
     data['pacienteId'] = pacienteId;
     data['doctorId'] = doctorId;
-    data['fechaDiagnostico'] = fechaDiagnostico;
+    data['fechaCreacion'] = fechaDiagnostico;
     data['diagnosticoDesc'] = diagnosticoDesc;
     return data;
   }
@@ -41,7 +41,7 @@ class Diagnostico {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['pacienteId'] = pacienteId;
     data['doctorId'] = doctorId;
-    data['fechaDiagnostico'] = fechaDiagnostico;
+    data['fechaCreacion'] = fechaDiagnostico;
     data['diagnosticoDesc'] = diagnosticoDesc;
     return data;
   }

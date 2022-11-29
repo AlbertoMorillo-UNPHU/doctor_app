@@ -30,10 +30,9 @@ class TratamientoRepository implements RepositoryTratamiento {
   }
 
   @override
-  Future<List<Tratamiento>> getTratamientoList(String userId) async {
+  Future<List<Tratamiento>> getTratamientoList() async {
     List<Tratamiento> parsedTratamiento = [];
-    http.Response tratamientoResponse =
-        await client.get(Uri.parse("$dataURL$userId"));
+    http.Response tratamientoResponse = await client.get(Uri.parse(dataURL));
 
     if (tratamientoResponse.statusCode == 200) {
       String jsonStringTratamiento = tratamientoResponse.body;

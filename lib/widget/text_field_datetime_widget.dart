@@ -49,10 +49,10 @@ class _TextFieldDateTimeWidgetState extends State<TextFieldDateTimeWidget> {
       },
       readOnly: true,
       onTap: () async {
-        DatePicker.showDatePicker(context,
+        DatePicker.showDateTimePicker(context,
             showTitleActions: true,
-            minTime: DateTime(DateTime.now().year, 1, 1, 7),
-            maxTime: DateTime(DateTime.now().year, 12, 30, 18),
+            minTime: DateTime(DateTime.now().year, 1, 1, 7, 0),
+            maxTime: DateTime(DateTime.now().year, 12, 31, 18, 60),
             onChanged: (date) {
           String formattedDate = DateFormat('yyyy-MM-ddThh:mm:ss').format(date);
           setState(() {

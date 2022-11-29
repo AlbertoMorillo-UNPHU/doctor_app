@@ -34,8 +34,7 @@ class _TratamientoPageState extends State<TratamientoPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    futureTratamiento =
-        tratamientoController.fetchTratamientoList(widget.userFire.uid);
+    futureTratamiento = tratamientoController.fetchTratamientoList();
   }
 
   @override
@@ -128,8 +127,7 @@ class _TratamientoPageState extends State<TratamientoPage> {
 
   _refreshTratamiento() {
     setState(() {
-      futureTratamiento =
-          tratamientoController.fetchTratamientoList(widget.userFire.uid);
+      futureTratamiento = tratamientoController.fetchTratamientoList();
     });
   }
 }

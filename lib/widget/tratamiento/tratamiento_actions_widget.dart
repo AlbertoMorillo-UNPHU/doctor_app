@@ -54,7 +54,6 @@ class _TratamientoActionsWidgetState extends State<TratamientoActionsWidget> {
                     actions: [
                       TextButton(
                         onPressed: () async {
-                          Navigator.pop(context);
                           String result = await widget.tratamientoController
                               .deleteTratamiento(widget.data[widget.position]);
                           if (result.isNotEmpty) {
@@ -68,6 +67,7 @@ class _TratamientoActionsWidgetState extends State<TratamientoActionsWidget> {
                                     actions: [
                                       TextButton(
                                         onPressed: () {
+                                          Navigator.pop(context);
                                           Navigator.pop(context);
                                           Navigator.pop(context);
                                           Navigator.of(context)
@@ -84,11 +84,11 @@ class _TratamientoActionsWidgetState extends State<TratamientoActionsWidget> {
                                 });
                           }
                         },
-                        child: const Text('YES'),
+                        child: const Text('Sí'),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('CANCEL'),
+                        child: const Text('No'),
                       ),
                     ],
                   );
@@ -102,7 +102,7 @@ class _TratamientoActionsWidgetState extends State<TratamientoActionsWidget> {
 
   _refreshPage() {
     setState(() {
-      widget.tratamientoController.fetchTratamientoList(widget.userFire!.uid);
+      widget.tratamientoController.fetchTratamientoList();
     });
   }
 }

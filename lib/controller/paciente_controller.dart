@@ -14,8 +14,8 @@ class PacienteController {
     return _repositoryPaciente.postPaciente(paciente);
   }
 
-  Future<Paciente> getPaciente(Paciente paciente) async {
-    return _repositoryPaciente.getPaciente(paciente);
+  Future<Paciente> getPaciente(int id) async {
+    return _repositoryPaciente.getPaciente(id);
   }
 
   Future<Paciente> putPaciente(Paciente paciente) async {

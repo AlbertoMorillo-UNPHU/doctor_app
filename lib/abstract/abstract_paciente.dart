@@ -6,5 +6,5 @@ abstract class RepositoryPaciente {
   Future<Paciente> putCompleted(Paciente paciente);
   Future<String> deletedPaciente(Paciente paciente);
   Future<Paciente> postPaciente(Paciente paciente);
-  Future<Paciente> getPaciente(Paciente paciente);
+  Future<Paciente> getPaciente(int id);
 }

@@ -6,8 +6,8 @@ class TratamientoController {
 
   TratamientoController(this._repositoryTratamiento);
 
-  Future<List<Tratamiento>> fetchTratamientoList(String userID) async {
-    return _repositoryTratamiento.getTratamientoList(userID);
+  Future<List<Tratamiento>> fetchTratamientoList() async {
+    return _repositoryTratamiento.getTratamientoList();
   }
 
   Future<Tratamiento> postTratamiento(Tratamiento tratamiento) async {

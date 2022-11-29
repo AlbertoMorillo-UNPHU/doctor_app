@@ -1,3 +1,6 @@
+import 'doctor.dart';
+import 'paciente.dart';
+
 class Tratamiento {
   int? id;
   int? pacienteId;
@@ -5,6 +8,8 @@ class Tratamiento {
   String? fechaInicio;
   String? fechaFin;
   String? tratamientoDesc;
+  Paciente? paciente;
+  Doctor? doctor;
 
   Tratamiento(
       {this.id,
@@ -21,6 +26,8 @@ class Tratamiento {
     fechaInicio = json['fechaInicio'];
     fechaFin = json['fechaFin'];
     tratamientoDesc = json['tratamientoDesc'];
+    paciente = Paciente.fromJson(json['paciente']);
+    doctor = Doctor.fromJson(json["doctor"]);
   }
 
   Tratamiento.fromJsonCustom(Map<String, dynamic> json) {
@@ -29,6 +36,8 @@ class Tratamiento {
     fechaInicio = json['fechaInicio'];
     fechaFin = json['fechaFin'];
     tratamientoDesc = json['tratamientoDesc'];
+    paciente = Paciente.fromJson(json['paciente']);
+    doctor = Doctor.fromJson(json["doctor"]);
   }
 
   Map<String, dynamic> toJson() {

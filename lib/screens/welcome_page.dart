@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
 import 'package:doctor_app/controller/auth_controller.dart';
+import 'package:doctor_app/screens/citas/cita_page.dart';
+import 'package:doctor_app/screens/diagnosticos/diagnostico_page.dart';
 import 'package:doctor_app/screens/doctors/doctor_page.dart';
 import 'package:doctor_app/screens/pacientes/paciente_page.dart';
 import 'package:doctor_app/screens/tratamientos/tratamiento_page.dart';
@@ -173,7 +175,11 @@ class NavigationDrawer extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.analytics_rounded),
           title: const Text('Diagnósticos'),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => DiagnosticoPage(userFire: userFire!),
+            ));
+          },
         ),
         ListTile(
           leading: const Icon(Icons.medication_liquid),
@@ -187,7 +193,11 @@ class NavigationDrawer extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.assignment),
           title: const Text('Citas'),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CitaPage(userFire: userFire!),
+            ));
+          },
         ),
       ]),
     );

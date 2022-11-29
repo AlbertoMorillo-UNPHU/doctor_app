@@ -92,6 +92,12 @@ class _AddTratamientoPageState extends State<AddTratamientoPage> {
                       prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Seleccione Paciente'),
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un doctor";
+                      }
+                      return null;
+                    },
                     items: apiPacientes.map((pac) {
                       return DropdownMenuItem(
                         value: pac,
@@ -109,6 +115,12 @@ class _AddTratamientoPageState extends State<AddTratamientoPage> {
                       prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Seleccione Doctor'),
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un paciente";
+                      }
+                      return null;
+                    },
                     items: apiDoctores.map((doc) {
                       return DropdownMenuItem(
                         value: doc,
@@ -164,6 +176,27 @@ class _AddTratamientoPageState extends State<AddTratamientoPage> {
                       )),
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
+                      DateTime d1 = DateTime.parse(fechaInicioController.text);
+                      DateTime d2 = DateTime.parse(fechaFinController.text);
+                      if (d1.compareTo(d2) > 0) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertWidget(
+                                title: "Ups! Anteción!",
+                                content:
+                                    "Fecha inicio no puede ser mayor a fecha fin.",
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ]);
+                          },
+                        );
+                      }
                       Tratamiento createdTratamiento =
                           await tratamientoController.postTratamiento(
                               Tratamiento(
