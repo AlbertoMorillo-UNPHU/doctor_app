@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:doctor_app/controller/auth_controller.dart';
 import 'package:doctor_app/screens/doctors/doctor_page.dart';
 import 'package:doctor_app/screens/pacientes/paciente_page.dart';
+import 'package:doctor_app/screens/tratamientos/tratamiento_page.dart';
 import 'package:doctor_app/screens/user_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -177,7 +178,11 @@ class NavigationDrawer extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.medication_liquid),
           title: const Text('Tratamientos'),
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => TratamientoPage(userFire: userFire!),
+            ));
+          },
         ),
         ListTile(
           leading: const Icon(Icons.assignment),
