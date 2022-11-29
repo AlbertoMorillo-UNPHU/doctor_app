@@ -6,6 +6,7 @@ import 'package:doctor_app/repository/doctor_repository.dart';
 import 'package:doctor_app/repository/paciente_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../controller/tratamiento_controller.dart';
 import '../../models/tratamiento.dart';
@@ -17,7 +18,9 @@ import '../../widget/text_field_widget.dart';
 
 class AddTratamientoPage extends StatefulWidget {
   final User? userFire;
-  const AddTratamientoPage({Key? key, this.userFire}) : super(key: key);
+  final Paciente? paciente;
+  const AddTratamientoPage({Key? key, this.userFire, this.paciente})
+      : super(key: key);
 
   @override
   State<AddTratamientoPage> createState() => _AddTratamientoPageState();
@@ -92,6 +95,8 @@ class _AddTratamientoPageState extends State<AddTratamientoPage> {
                       prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Seleccione Paciente'),
+                    value: apiPacientes.firstWhereOrNull(
+                        (element) => element.id == widget.paciente!.id),
                     validator: (value) {
                       if (value == null) {
                         return "Debe seleccionar un doctor";

@@ -1,4 +1,6 @@
+import 'package:doctor_app/screens/diagnosticos/add_diagnostico_page.dart';
 import 'package:doctor_app/screens/pacientes/paciente_page.dart';
+import 'package:doctor_app/screens/tratamientos/add_tratamiento_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -161,6 +163,45 @@ class _EditPacientePageState extends State<EditPacientePage> {
                     }
                   },
                   child: const Text('Guardas cambios'),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AddDiagnosticoPage(
+                                userFire: widget.userFire,
+                                paciente: widget.selectedPaciente,
+                              ),
+                            ));
+                          },
+                          style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 30),
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                              shape: const StadiumBorder()),
+                          child: const Text('Diagnóstico')),
+                    ),
+                    Expanded(
+                        child: TextButton(
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => AddTratamientoPage(
+                                  userFire: widget.userFire,
+                                  paciente: widget.selectedPaciente,
+                                ),
+                              ));
+                            },
+                            style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 30),
+                                foregroundColor: Colors.white,
+                                backgroundColor: Colors.blue,
+                                shape: const StadiumBorder()),
+                            child: const Text('Tratamiento')))
+                  ],
                 )
               ],
             ),
