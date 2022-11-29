@@ -20,9 +20,25 @@ class Diagnostico {
     diagnosticoDesc = json['diagnosticoDesc'];
   }
 
+    Diagnostico.fromJsonCustom(Map<String, dynamic> json) {
+    pacienteId = json['pacienteId'];
+    doctorId = json['doctorId'];
+    fechaDiagnostico = json['fechaDiagnostico'];
+    diagnosticoDesc = json['diagnosticoDesc'];
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['pacienteId'] = pacienteId;
+    data['doctorId'] = doctorId;
+    data['fechaDiagnostico'] = fechaDiagnostico;
+    data['diagnosticoDesc'] = diagnosticoDesc;
+    return data;
+  }
+
+  Map<String, dynamic> toJsonCustom() {
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['pacienteId'] = pacienteId;
     data['doctorId'] = doctorId;
     data['fechaDiagnostico'] = fechaDiagnostico;
