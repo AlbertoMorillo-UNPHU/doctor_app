@@ -1,14 +1,17 @@
 import 'package:doctor_app/models/doctor.dart';
 import 'package:doctor_app/models/paciente.dart';
+import 'package:doctor_app/repository/cita_repository.dart';
+import 'package:doctor_app/widget/text_field_datetime_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/cita_controller.dart';
+import '../../controller/doctor_controller.dart';
+import '../../controller/paciente_controller.dart';
 import '../../models/cita.dart';
-import '../../repository/Cita_repository.dart';
+import '../../repository/doctor_repository.dart';
+import '../../repository/paciente_repository.dart';
 import '../../widget/alert_widget.dart';
-import '../../widget/radio_button_widget.dart';
-import '../../widget/text_field_date_widget.dart';
 import '../../widget/text_field_widget.dart';
 
 class AddCitaPage extends StatefulWidget {
@@ -24,14 +27,38 @@ class _AddCitaPageState extends State<AddCitaPage> {
   int? pacienteId;
   int? doctorId;
   TextEditingController cita1Controller = TextEditingController();
-  List<Doctor> apiDoctores = [];
-  List<Paciente> apiPacientes = [];
   CitaController citaController = CitaController(CitaRepository());
+  PacienteController pacienteController =
+      PacienteController(PacienteRepository());
+  List<Paciente> apiPacientes = [];
+
+  DoctorController doctorController = DoctorController(DoctorRepository());
+  List<Doctor> apiDoctores = [];
+
+  Future getPacientes() {
+    Future<List<Paciente>> futurePacientes =
+        pacienteController.fetchPacienteList(widget.userFire!.uid);
+    futurePacientes.then((list) {
+      setState(() => apiPacientes = list);
+    });
+    return futurePacientes;
+  }
+
+  Future getDoctores() {
+    Future<List<Doctor>> futureDoctores =
+        doctorController.fetchDoctorList(widget.userFire!.uid);
+    futureDoctores.then((list) {
+      setState(() => apiDoctores = list);
+    });
+    return futureDoctores;
+  }
 
   @override
   void initState() {
     // TODO: implement initStated
     super.initState();
+    getDoctores();
+    getPacientes();
   }
 
   @override
@@ -56,7 +83,7 @@ class _AddCitaPageState extends State<AddCitaPage> {
               children: [
                 DropdownButtonFormField<Paciente>(
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.category_outlined),
+                      prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Paciente'),
                     validator: (value) {
@@ -68,7 +95,7 @@ class _AddCitaPageState extends State<AddCitaPage> {
                     items: apiPacientes.map((pac) {
                       return DropdownMenuItem(
                         value: pac,
-                        child: Text(pac.nombre!),
+                        child: Text("${pac.nombre} ${pac.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
@@ -79,7 +106,7 @@ class _AddCitaPageState extends State<AddCitaPage> {
                 ),
                 DropdownButtonFormField<Doctor>(
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.category_outlined),
+                      prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Doctor'),
                     validator: (value) {
@@ -91,7 +118,7 @@ class _AddCitaPageState extends State<AddCitaPage> {
                     items: apiDoctores.map((doc) {
                       return DropdownMenuItem(
                         value: doc,
-                        child: Text(doc.nombre!),
+                        child: Text("${doc.nombre} ${doc.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
@@ -100,13 +127,13 @@ class _AddCitaPageState extends State<AddCitaPage> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                TextFieldWidget(
+                TextFieldDateTimeWidget(
                   controller: cita1Controller,
-                  hintText: 'Cita 1',
-                  labelText: 'Cita 1',
+                  hintText: 'Fecha Cita',
+                  labelText: 'Fecha Cita',
                   isDense: true,
                   inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Cita 1',
+                  requiredText: 'Se requiere la fecha de la cita',
                 ),
                 const SizedBox(
                   height: 20.0,
@@ -121,9 +148,29 @@ class _AddCitaPageState extends State<AddCitaPage> {
                       )),
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
+                      DateTime d1 = DateTime.parse(cita1Controller.text);
+                      if (d1.compareTo(DateTime.now()) < 0) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertWidget(
+                                title: "Ups! Anteción!",
+                                content:
+                                    "Fecha de la cita no puede ser menor a la fecha actual.",
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ]);
+                          },
+                        );
+                      }
                       Cita createdCita = await citaController.postCita(Cita(
                         pacienteId: pacienteId!,
-                        doctorId: pacienteId!,
+                        doctorId: doctorId!,
                         cita1: cita1Controller.text,
                       ));
                       if (createdCita.cita1!.isNotEmpty) {

@@ -2,8 +2,10 @@
 import 'package:doctor_app/controller/doctor_controller.dart';
 import 'package:doctor_app/controller/paciente_controller.dart';
 import 'package:doctor_app/screens/Citas/Cita_page.dart';
+import 'package:doctor_app/widget/text_field_datetime_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../controller/cita_controller.dart';
 import '../../models/cita.dart';
@@ -14,8 +16,6 @@ import '../../repository/cita_repository.dart';
 import '../../repository/doctor_repository.dart';
 import '../../repository/paciente_repository.dart';
 import '../../widget/alert_widget.dart';
-import '../../widget/radio_button_widget.dart';
-import '../../widget/text_field_date_widget.dart';
 import '../../widget/text_field_widget.dart';
 
 class EditCitaPage extends StatefulWidget {
@@ -32,10 +32,11 @@ class _EditCitaPageState extends State<EditCitaPage> {
   GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
   int? pacienteId;
   int? doctorId;
+  Paciente? selectedPaciente;
+  Doctor? selectedDoctor;
   TextEditingController cita1Controller = TextEditingController();
   List<Doctor> apiDoctores = [];
   List<Paciente> apiPacientes = [];
-  Paciente citaPaciente = Paciente();
   //Doctor citaDoctor = Doctor();
   //campos de doctor son requeridos
   CitaController citaController = CitaController(CitaRepository());
@@ -48,6 +49,8 @@ class _EditCitaPageState extends State<EditCitaPage> {
         pacienteController.fetchPacienteList(widget.userFire!.uid);
     futurePacientes.then((list) {
       setState(() => apiPacientes = list);
+      selectedPaciente = apiPacientes.firstWhereOrNull(
+          (element) => element.id == widget.selectedCita.pacienteId);
     });
     return futurePacientes;
   }
@@ -57,6 +60,8 @@ class _EditCitaPageState extends State<EditCitaPage> {
         doctorController.fetchDoctorList(widget.userFire!.uid);
     futureDoctores.then((list) {
       setState(() => apiDoctores = list);
+      selectedDoctor = apiDoctores.firstWhereOrNull(
+          (element) => element.id == widget.selectedCita.doctorId);
     });
     return futureDoctores;
   }
@@ -68,14 +73,15 @@ class _EditCitaPageState extends State<EditCitaPage> {
     getPacientes();
     getDoctores();
     cita1Controller.text = widget.selectedCita.cita1!;
+    pacienteId = widget.selectedCita.pacienteId;
+    doctorId = widget.selectedCita.doctorId;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Editando Cita: ${widget.selectedCita.cita1}'),
+        title: Text('Editando Cita: ${widget.selectedCita.cita1}'),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -88,11 +94,18 @@ class _EditCitaPageState extends State<EditCitaPage> {
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
-                    hint: const Text('Paciente'),
+                    hint: const Text('Seleccione Paciente'),
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un paciente";
+                      }
+                      return null;
+                    },
+                    value: selectedPaciente,
                     items: apiPacientes.map((pac) {
                       return DropdownMenuItem(
                         value: pac,
-                        child: Text(pac.nombre!),
+                        child: Text("${pac.nombre!} ${pac.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
@@ -105,11 +118,18 @@ class _EditCitaPageState extends State<EditCitaPage> {
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
-                    hint: const Text('Doctor'),
+                    hint: const Text('Seleccione Doctor'),
+                    value: selectedDoctor,
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un doctor";
+                      }
+                      return null;
+                    },
                     items: apiDoctores.map((doc) {
                       return DropdownMenuItem(
                         value: doc,
-                        child: Text(doc.nombre!),
+                        child: Text("${doc.nombre!} ${doc.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
@@ -118,13 +138,13 @@ class _EditCitaPageState extends State<EditCitaPage> {
                 const SizedBox(
                   height: 20.0,
                 ),
-                TextFieldWidget(
+                TextFieldDateTimeWidget(
                   controller: cita1Controller,
-                  hintText: 'Cita 1',
-                  labelText: 'Cita 1',
+                  hintText: 'Fecha Cita',
+                  labelText: 'Fecha Cita',
                   isDense: true,
                   inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Cita 1',
+                  requiredText: 'Debe seleccionar la fecha de la cita.',
                 ),
                 const SizedBox(
                   height: 30.0,
@@ -139,10 +159,30 @@ class _EditCitaPageState extends State<EditCitaPage> {
                       )),
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
+                      DateTime d1 = DateTime.parse(cita1Controller.text);
+                      if (d1.compareTo(DateTime.now()) < 0) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertWidget(
+                                title: "Ups! Anteción!",
+                                content:
+                                    "Fecha de la cita no puede ser menor a la fecha actual.",
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ]);
+                          },
+                        );
+                      }
                       Cita createdCita = await citaController.putCita(Cita(
                         id: widget.selectedCita.id,
                         pacienteId: pacienteId!,
-                        doctorId: pacienteId!,
+                        doctorId: doctorId!,
                         cita1: cita1Controller.text,
                       ));
                       if (createdCita.cita1!.isNotEmpty) {

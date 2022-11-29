@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/cita.dart';
 import 'cita_detail_widget.dart';
@@ -23,25 +24,29 @@ class CitaDataWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "${data[position].cita1}",
+          DateFormat("d MMMM, yyyy")
+              .add_jm()
+              .format(DateTime.parse(data[position].cita1!)),
           style: titleStyle,
         ),
         const SizedBox(height: 5.0),
         CitaDetailWidget(
             propIcon: Icons.person,
-            propTitle: 'PacienteId ',
-            propDetail: '${data[position].pacienteId}',
+            propTitle: 'Paciente:',
+            propDetail:
+                '${data[position].paciente!.nombre} ${data[position].paciente!.apellidos}',
             propStyle: propStyle),
         const SizedBox(height: 5.0),
         CitaDetailWidget(
             propIcon: Icons.health_and_safety,
-            propTitle: 'DoctorId: ',
-            propDetail:'${data[position].doctorId}',
+            propTitle: 'Doctor:',
+            propDetail:
+                '${data[position].doctor!.nombre} ${data[position].doctor!.apellidos}',
             propStyle: propStyle),
         const SizedBox(height: 5.0),
         CitaDetailWidget(
             propIcon: Icons.note_rounded,
-            propTitle: 'Cita1: ',
+            propTitle: 'Fecha Cita: ',
             propDetail: data[position].cita1!,
             propStyle: propStyle),
       ],

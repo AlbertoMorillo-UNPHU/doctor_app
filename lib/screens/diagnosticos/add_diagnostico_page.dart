@@ -89,7 +89,7 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
               children: [
                 DropdownButtonFormField<Paciente>(
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.category_outlined),
+                      prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Paciente'),
                     validator: (value) {
@@ -113,7 +113,7 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
                 ),
                 DropdownButtonFormField<Doctor>(
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.category_outlined),
+                      prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Doctor'),
                     validator: (value) {

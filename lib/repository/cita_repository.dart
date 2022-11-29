@@ -31,13 +31,12 @@ class CitaRepository implements RepositoryCita {
   @override
   Future<List<Cita>> getCitaList(String id) async {
     List<Cita> parsedCita = [];
-    http.Response citaResponse =
-        await client.get(Uri.parse("$dataURL$id"));
+    http.Response citaResponse = await client.get(Uri.parse(dataURL));
 
     if (citaResponse.statusCode == 200) {
       String jsonStringCita = citaResponse.body;
       parsedCita = List<Cita>.from(
-          json.decode(jsonStringCita).map((b) => Cita.fromJson(b)));
+          json.decode(jsonStringCita).map((b) => Cita.fromJsonInclude(b)));
       return parsedCita;
     } else {
       throw "Error al cargar la cita del usuario";
@@ -53,13 +52,13 @@ class CitaRepository implements RepositoryCita {
   @override
   Future<Cita> postCita(Cita cita) async {
     Cita? citaCreada;
-
+    print(jsonEncode(cita.toJsonCustom()));
     http.Response postResponse = await client.post(Uri.parse(dataURL),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
         body: jsonEncode(cita.toJsonCustom()));
-
+    print(postResponse.statusCode);
     if (postResponse.statusCode == 201) {
       citaCreada = Cita.fromJson(jsonDecode(postResponse.body));
       return citaCreada;
@@ -71,8 +70,7 @@ class CitaRepository implements RepositoryCita {
   @override
   Future<Cita> putCompleted(Cita cita) async {
     Cita? citaCreado;
-    print(
-        "${cita.id} ${cita.pacienteId} ${cita.doctorId} ${cita.cita1}");
+    print("${cita.id} ${cita.pacienteId} ${cita.doctorId} ${cita.cita1}");
     http.Response putResponse = await client.put(
         Uri.parse('$dataURL${cita.id}'),
         headers: <String, String>{

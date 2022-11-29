@@ -95,7 +95,7 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
               children: [
                 DropdownButtonFormField<Paciente>(
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.category_outlined),
+                      prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Paciente'),
                     value: pacienteSelected,
@@ -119,7 +119,7 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
                 ),
                 DropdownButtonFormField<Doctor>(
                     decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.category_outlined),
+                      prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Doctor'),
                     value: doctorSelected,

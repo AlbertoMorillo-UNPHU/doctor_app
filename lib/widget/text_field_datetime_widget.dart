@@ -51,15 +51,15 @@ class _TextFieldDateTimeWidgetState extends State<TextFieldDateTimeWidget> {
       onTap: () async {
         DatePicker.showDateTimePicker(context,
             showTitleActions: true,
-            minTime: DateTime(DateTime.now().year, 1, 1, 7, 0),
-            maxTime: DateTime(DateTime.now().year, 12, 31, 18, 60),
+            minTime: DateTime(DateTime.now().year, 1, 1, 1, 0),
+            maxTime: DateTime(DateTime.now().year, 12, 31, 24, 60),
             onChanged: (date) {
-          String formattedDate = DateFormat('yyyy-MM-ddThh:mm:ss').format(date);
+          String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(date);
           setState(() {
             widget.controller.text = formattedDate;
           });
         }, onConfirm: (date) {
-          String formattedDate = DateFormat('yyyy-MM-ddThh:mm:ss').format(date);
+          String formattedDate = DateFormat('yyyy-MM-ddTHH:mm:ss').format(date);
           setState(() {
             widget.controller.text = formattedDate;
           });

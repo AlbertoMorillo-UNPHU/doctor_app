@@ -20,8 +20,7 @@ class CitaPage extends StatefulWidget {
 
 class _CitaPageState extends State<CitaPage> {
   List<Cita> apiCita = [];
-  CitaController citaController =
-      CitaController(CitaRepository());
+  CitaController citaController = CitaController(CitaRepository());
   late Future<List<Cita>> futureCita;
   TextStyle titleStyle =
       const TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0);
@@ -115,7 +114,7 @@ class _CitaPageState extends State<CitaPage> {
                 );
               } else {
                 return const InfoWidget(
-                    info: "No hay Citaes disponibles", color: Colors.red);
+                    info: "No hay Citas disponibles", color: Colors.red);
               }
           }
         },
@@ -125,8 +124,7 @@ class _CitaPageState extends State<CitaPage> {
 
   _refreshCita() {
     setState(() {
-      futureCita =
-          citaController.fetchCitaList(widget.userFire.uid);
+      futureCita = citaController.fetchCitaList(widget.userFire.uid);
     });
   }
 }

@@ -1,9 +1,8 @@
 import 'package:doctor_app/models/cita.dart';
-
-import '../abstract/abstract_cita.dart';
+import 'package:doctor_app/repository/cita_repository.dart';
 
 class CitaController {
-  final RepositoryCita _citaRepository;
+  final CitaRepository _citaRepository;
 
   CitaController(this._citaRepository);
 
@@ -21,15 +20,9 @@ class CitaController {
 
   Future<Cita> putCita(Cita cita) async {
     return _citaRepository.putCompleted(cita);
-
-    
   }
 
   Future<String> deleteCita(Cita cita) async {
     return _citaRepository.deletedCita(cita);
-
-    
   }
-
-  
 }

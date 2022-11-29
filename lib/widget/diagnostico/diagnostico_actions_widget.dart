@@ -21,7 +21,8 @@ class DiagnosticoActionsWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<DiagnosticoActionsWidget> createState() => _DiagnosticoActionsWidgetState();
+  State<DiagnosticoActionsWidget> createState() =>
+      _DiagnosticoActionsWidgetState();
 }
 
 class _DiagnosticoActionsWidgetState extends State<DiagnosticoActionsWidget> {
@@ -71,8 +72,9 @@ class _DiagnosticoActionsWidgetState extends State<DiagnosticoActionsWidget> {
                                           Navigator.pop(context);
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (context) => DiagnosticoPage(
-                                                userFire: widget.userFire!),
+                                            builder: (context) =>
+                                                DiagnosticoPage(
+                                                    userFire: widget.userFire!),
                                           ));
                                         },
                                         child: const Text('OK'),
@@ -82,11 +84,11 @@ class _DiagnosticoActionsWidgetState extends State<DiagnosticoActionsWidget> {
                                 });
                           }
                         },
-                        child: const Text('YES'),
+                        child: const Text('Sí'),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('CANCEL'),
+                        child: const Text('No'),
                       ),
                     ],
                   );

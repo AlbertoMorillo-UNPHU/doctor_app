@@ -82,11 +82,11 @@ class _CitaActionsWidgetState extends State<CitaActionsWidget> {
                                 });
                           }
                         },
-                        child: const Text('YES'),
+                        child: const Text('Sí'),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: const Text('CANCEL'),
+                        child: const Text('No'),
                       ),
                     ],
                   );
