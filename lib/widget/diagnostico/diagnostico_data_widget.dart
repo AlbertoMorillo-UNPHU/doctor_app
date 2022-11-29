@@ -29,14 +29,16 @@ class DiagnosticoDataWidget extends StatelessWidget {
         const SizedBox(height: 5.0),
         DiagnosticoDetailWidget(
             propIcon: Icons.person,
-            propTitle: 'PacienteId: ',
-            propDetail: '${data[position].pacienteId}',
+            propTitle: 'Paciente: ',
+            propDetail:
+                '${data[position].paciente!.nombre} ${data[position].paciente!.apellidos}',
             propStyle: propStyle),
         const SizedBox(height: 5.0),
         DiagnosticoDetailWidget(
             propIcon: Icons.health_and_safety,
-            propTitle: 'DoctorId: ',
-            propDetail: '${data[position].doctorId}',
+            propTitle: 'Doctor: ',
+            propDetail:
+                '${data[position].doctor!.nombre} ${data[position].doctor!.apellidos}',
             propStyle: propStyle),
         const SizedBox(height: 5.0),
         DiagnosticoDetailWidget(

@@ -59,6 +59,12 @@ class _AddCitaPageState extends State<AddCitaPage> {
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
                     hint: const Text('Paciente'),
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un paciente";
+                      }
+                      return null;
+                    },
                     items: apiPacientes.map((pac) {
                       return DropdownMenuItem(
                         value: pac,
@@ -76,6 +82,12 @@ class _AddCitaPageState extends State<AddCitaPage> {
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
                     hint: const Text('Doctor'),
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un doctor";
+                      }
+                      return null;
+                    },
                     items: apiDoctores.map((doc) {
                       return DropdownMenuItem(
                         value: doc,
@@ -110,9 +122,10 @@ class _AddCitaPageState extends State<AddCitaPage> {
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
                       Cita createdCita = await citaController.postCita(Cita(
-                          pacienteId: pacienteId!,
-                          doctorId: pacienteId!,
-                          cita1: cita1Controller.text,));
+                        pacienteId: pacienteId!,
+                        doctorId: pacienteId!,
+                        cita1: cita1Controller.text,
+                      ));
                       if (createdCita.cita1!.isNotEmpty) {
                         showDialog(
                             context: context,
@@ -127,7 +140,6 @@ class _AddCitaPageState extends State<AddCitaPage> {
                                         Navigator.of(context).pop();
                                         editFormKey.currentState!.reset();
                                         cita1Controller.clear();
-          
                                       },
                                       child: const Text('OK'),
                                     ),

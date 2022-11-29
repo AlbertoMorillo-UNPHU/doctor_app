@@ -1,6 +1,8 @@
 import 'package:doctor_app/screens/Diagnosticos/Diagnostico_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../controller/diagnostico_controller.dart';
 import '../../controller/doctor_controller.dart';
@@ -12,8 +14,6 @@ import '../../repository/diagnostico_repository.dart';
 import '../../repository/doctor_repository.dart';
 import '../../repository/paciente_repository.dart';
 import '../../widget/alert_widget.dart';
-import '../../widget/radio_button_widget.dart';
-import '../../widget/text_field_date_widget.dart';
 import '../../widget/text_field_widget.dart';
 
 class EditDiagnosticoPage extends StatefulWidget {
@@ -31,11 +31,12 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
   GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
   int? pacienteId;
   int? doctorId;
+  Doctor? doctorSelected;
+  Paciente? pacienteSelected;
   DateTime? fechaDiagnostico;
   TextEditingController diagnosticoDescController = TextEditingController();
   List<Doctor> apiDoctores = [];
   List<Paciente> apiPacientes = [];
-  Paciente citaPaciente = Paciente();
   //Doctor citaDoctor = Doctor();
   //campos de doctor son requeridos
   PacienteController pacienteController =
@@ -49,6 +50,8 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
         pacienteController.fetchPacienteList(widget.userFire!.uid);
     futurePacientes.then((list) {
       setState(() => apiPacientes = list);
+      pacienteSelected = apiPacientes.firstWhereOrNull(
+          (element) => element.id == widget.selectedDiagnostico.pacienteId);
     });
     return futurePacientes;
   }
@@ -58,6 +61,8 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
         doctorController.fetchDoctorList(widget.userFire!.uid);
     futureDoctores.then((list) {
       setState(() => apiDoctores = list);
+      doctorSelected = apiDoctores.firstWhereOrNull(
+          (element) => element.id == widget.selectedDiagnostico.doctorId);
     });
     return futureDoctores;
   }
@@ -70,7 +75,8 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
     getDoctores();
     diagnosticoDescController.text =
         widget.selectedDiagnostico.diagnosticoDesc!;
-    // genero = widget.selectedDiagnostico.genero;
+    doctorId = widget.selectedDiagnostico.doctorId!;
+    pacienteId = widget.selectedDiagnostico.pacienteId!;
   }
 
   @override
@@ -92,10 +98,17 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
                     hint: const Text('Paciente'),
+                    value: pacienteSelected,
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un paciente";
+                      }
+                      return null;
+                    },
                     items: apiPacientes.map((pac) {
                       return DropdownMenuItem(
                         value: pac,
-                        child: Text(pac.nombre!),
+                        child: Text("${pac.nombre!} ${pac.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
@@ -109,10 +122,17 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
                     hint: const Text('Doctor'),
+                    value: doctorSelected,
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un doctor";
+                      }
+                      return null;
+                    },
                     items: apiDoctores.map((doc) {
                       return DropdownMenuItem(
                         value: doc,
-                        child: Text(doc.nombre!),
+                        child: Text("${doc.nombre!} ${doc.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
@@ -147,7 +167,10 @@ class _EditDiagnosticoPageState extends State<EditDiagnosticoPage> {
                               Diagnostico(
                                   id: widget.selectedDiagnostico.id,
                                   pacienteId: pacienteId!,
-                                  doctorId: pacienteId!,
+                                  doctorId: doctorId!,
+                                  fechaDiagnostico:
+                                      DateFormat("yyyy-MM-ddThh:mm:ss")
+                                          .format(DateTime.now()),
                                   diagnosticoDesc:
                                       diagnosticoDescController.text));
                       if (createdDiagnostico.diagnosticoDesc!.isNotEmpty) {

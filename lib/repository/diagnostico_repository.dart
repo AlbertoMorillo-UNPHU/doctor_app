@@ -5,7 +5,7 @@ import '../abstract/abstract_diagnostico.dart';
 import '../models/diagnostico.dart';
 import 'global.dart';
 
-String dataURL = "${Global.dataURL}Diagnosticos/";
+String dataURL = "${Global.dataURL}Diagnosticoes/";
 
 class DiagnosticoRepository implements RepositoryDiagnostico {
   http.Client client = http.Client();
@@ -31,13 +31,13 @@ class DiagnosticoRepository implements RepositoryDiagnostico {
   @override
   Future<List<Diagnostico>> getDiagnosticoList(String id) async {
     List<Diagnostico> parsedDiagnostico = [];
-    http.Response diagnosticoResponse =
-        await client.get(Uri.parse("$dataURL$id"));
+    http.Response diagnosticoResponse = await client.get(Uri.parse(dataURL));
 
     if (diagnosticoResponse.statusCode == 200) {
       String jsonStringDiagnostico = diagnosticoResponse.body;
-      parsedDiagnostico = List<Diagnostico>.from(
-          json.decode(jsonStringDiagnostico).map((b) => Diagnostico.fromJson(b)));
+      parsedDiagnostico = List<Diagnostico>.from(json
+          .decode(jsonStringDiagnostico)
+          .map((b) => Diagnostico.fromJsonInclude(b)));
       return parsedDiagnostico;
     } else {
       throw "Error al cargar Diagnosticos del usuario";
@@ -53,6 +53,7 @@ class DiagnosticoRepository implements RepositoryDiagnostico {
   @override
   Future<Diagnostico> postDiagnostico(Diagnostico diagnostico) async {
     Diagnostico? diagnosticoCreado;
+    print(jsonEncode(diagnostico.toJsonCustom()));
 
     http.Response postResponse = await client.post(Uri.parse(dataURL),
         headers: <String, String>{
@@ -60,6 +61,7 @@ class DiagnosticoRepository implements RepositoryDiagnostico {
         },
         body: jsonEncode(diagnostico.toJsonCustom()));
 
+    print(jsonDecode(postResponse.body));
     if (postResponse.statusCode == 201) {
       diagnosticoCreado = Diagnostico.fromJson(jsonDecode(postResponse.body));
       return diagnosticoCreado;
@@ -80,7 +82,7 @@ class DiagnosticoRepository implements RepositoryDiagnostico {
         },
         body: jsonEncode(diagnostico.toJson()));
     print(
-        "Logger status code: ${putResponse.statusCode} con URL: $dataURL y json: ${jsonEncode(diagnostico.toJsonCustom())}");
+        "Logger status code: ${putResponse.statusCode} con URL: $dataURL${diagnostico.id} y json: ${jsonEncode(diagnostico.toJson())}");
     if (putResponse.statusCode == 201) {
       diagnosticoCreado = Diagnostico.fromJson(jsonDecode(putResponse.body));
       return diagnosticoCreado;

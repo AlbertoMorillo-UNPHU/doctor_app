@@ -1,14 +1,17 @@
 import 'package:doctor_app/models/doctor.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../controller/diagnostico_controller.dart';
+import '../../controller/doctor_controller.dart';
+import '../../controller/paciente_controller.dart';
 import '../../models/diagnostico.dart';
 import '../../models/paciente.dart';
 import '../../repository/diagnostico_repository.dart';
+import '../../repository/doctor_repository.dart';
+import '../../repository/paciente_repository.dart';
 import '../../widget/alert_widget.dart';
-import '../../widget/radio_button_widget.dart';
-import '../../widget/text_field_date_widget.dart';
 import '../../widget/text_field_widget.dart';
 
 class AddDiagnosticoPage extends StatefulWidget {
@@ -24,16 +27,44 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
   GlobalKey<FormState> editFormKey = GlobalKey<FormState>();
   int? pacienteId;
   int? doctorId;
+  Doctor? doctor;
+  Paciente? paciente;
   DateTime? fechaDiagnostico;
   TextEditingController diagnosticoDescController = TextEditingController();
-  List<Doctor> apiDoctores = [];
+  DiagnosticoController diagnosticoController =
+      DiagnosticoController(DiagnosticoRepository());
+
+  PacienteController pacienteController =
+      PacienteController(PacienteRepository());
   List<Paciente> apiPacientes = [];
-  DiagnosticoController diagnosticoController = DiagnosticoController(DiagnosticoRepository());
+
+  DoctorController doctorController = DoctorController(DoctorRepository());
+  List<Doctor> apiDoctores = [];
+
+  Future getPacientes() {
+    Future<List<Paciente>> futurePacientes =
+        pacienteController.fetchPacienteList(widget.userFire!.uid);
+    futurePacientes.then((list) {
+      setState(() => apiPacientes = list);
+    });
+    return futurePacientes;
+  }
+
+  Future getDoctores() {
+    Future<List<Doctor>> futureDoctores =
+        doctorController.fetchDoctorList(widget.userFire!.uid);
+    futureDoctores.then((list) {
+      setState(() => apiDoctores = list);
+    });
+    return futureDoctores;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getDoctores();
+    getPacientes();
   }
 
   @override
@@ -56,19 +87,26 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-              DropdownButtonFormField<Paciente>(
+                DropdownButtonFormField<Paciente>(
                     decoration: const InputDecoration(
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
                     hint: const Text('Paciente'),
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un paciente";
+                      }
+                      return null;
+                    },
                     items: apiPacientes.map((pac) {
                       return DropdownMenuItem(
                         value: pac,
-                        child: Text(pac.nombre!),
+                        child: Text("${pac.nombre!} ${pac.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
-                          pacienteId = value!.id;
+                          paciente = value!;
+                          pacienteId = value.id;
                         })),
                 const SizedBox(
                   height: 20.0,
@@ -78,14 +116,21 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
                       prefixIcon: Icon(Icons.category_outlined),
                     ),
                     hint: const Text('Doctor'),
+                    validator: (value) {
+                      if (value == null) {
+                        return "Debe seleccionar un doctor";
+                      }
+                      return null;
+                    },
                     items: apiDoctores.map((doc) {
                       return DropdownMenuItem(
                         value: doc,
-                        child: Text(doc.nombre!),
+                        child: Text("${doc.nombre!} ${doc.apellidos}"),
                       );
                     }).toList(),
                     onChanged: (value) => setState(() {
-                          doctorId = value!.id;
+                          doctor = value!;
+                          doctorId = value.id;
                         })),
                 const SizedBox(
                   height: 20.0,
@@ -112,11 +157,17 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
                       Diagnostico createdDiagnostico =
-                          await diagnosticoController.postDiagnostico(
-                              Diagnostico(
+                          await diagnosticoController
+                              .postDiagnostico(Diagnostico(
                                   pacienteId: pacienteId!,
-                          doctorId: pacienteId!,
-                          diagnosticoDesc: diagnosticoDescController.text,));
+                                  doctorId: doctorId!,
+                                  fechaDiagnostico:
+                                      DateFormat("yyyy-MM-ddThh:mm:ss")
+                                          .format(DateTime.now()),
+                                  diagnosticoDesc:
+                                      diagnosticoDescController.text,
+                                  paciente: paciente,
+                                  doctor: doctor));
                       if (createdDiagnostico.diagnosticoDesc!.isNotEmpty) {
                         showDialog(
                             context: context,

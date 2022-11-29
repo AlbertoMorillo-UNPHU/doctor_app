@@ -38,7 +38,7 @@ class TratamientoRepository implements RepositoryTratamiento {
       String jsonStringTratamiento = tratamientoResponse.body;
       parsedTratamiento = List<Tratamiento>.from(json
           .decode(jsonStringTratamiento)
-          .map((b) => Tratamiento.fromJson(b)));
+          .map((b) => Tratamiento.fromJsonInclude(b)));
       return parsedTratamiento;
     } else {
       throw "Error al cargar Tratamientoes del usuario";

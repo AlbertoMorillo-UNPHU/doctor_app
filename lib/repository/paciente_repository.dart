@@ -26,11 +26,8 @@ class PacienteRepository implements RepositoryPaciente {
   @override
   Future<Paciente> getPaciente(int id) async {
     Paciente parsedPaciente;
-    print("URLAAAAAAAAA");
-    print("$dataURL/Paciente/$id");
     http.Response pacienteResponse =
         await client.get(Uri.parse("$dataURLGet/Paciente/$id"));
-    print(pacienteResponse.statusCode);
     if (pacienteResponse.statusCode == 200) {
       parsedPaciente = Paciente.fromJson(jsonDecode(pacienteResponse.body));
       return parsedPaciente;

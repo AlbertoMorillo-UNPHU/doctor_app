@@ -15,6 +15,7 @@ import '../../repository/tratamiento_repository.dart';
 import '../../widget/alert_widget.dart';
 import '../../widget/text_field_date_widget.dart';
 import '../../widget/text_field_widget.dart';
+import 'tratamiento_page.dart';
 
 class EditTratamientoPage extends StatefulWidget {
   final Tratamiento selectedTratamiento;
@@ -237,7 +238,15 @@ class _EditTratamientoState extends State<EditTratamientoPage> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).pop();
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    TratamientoPage(
+                                                        userFire:
+                                                            widget.userFire!)));
                                         editFormKey.currentState!.reset();
                                         tratamientoDescController.clear();
                                         fechaInicioController.clear();

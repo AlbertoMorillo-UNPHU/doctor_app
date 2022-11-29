@@ -17,9 +17,20 @@ class Tratamiento {
       this.doctorId,
       this.fechaInicio,
       this.fechaFin,
-      this.tratamientoDesc});
+      this.tratamientoDesc,
+      this.paciente,
+      this.doctor});
 
   Tratamiento.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    pacienteId = json['pacienteId'];
+    doctorId = json['doctorId'];
+    fechaInicio = json['fechaInicio'];
+    fechaFin = json['fechaFin'];
+    tratamientoDesc = json['tratamientoDesc'];
+  }
+
+  Tratamiento.fromJsonInclude(Map<String, dynamic> json) {
     id = json['id'];
     pacienteId = json['pacienteId'];
     doctorId = json['doctorId'];
@@ -36,8 +47,6 @@ class Tratamiento {
     fechaInicio = json['fechaInicio'];
     fechaFin = json['fechaFin'];
     tratamientoDesc = json['tratamientoDesc'];
-    paciente = Paciente.fromJson(json['paciente']);
-    doctor = Doctor.fromJson(json["doctor"]);
   }
 
   Map<String, dynamic> toJson() {
