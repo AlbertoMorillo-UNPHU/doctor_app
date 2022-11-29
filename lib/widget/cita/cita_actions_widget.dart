@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../controller/cita_controller.dart';
 import '../../models/cita.dart';
-import '../../screens/citas/edit_Cita_page.dart';
+import '../../screens/citas/edit_cita_page.dart';
 import '../../screens/citas/cita_page.dart';
 import '../alert_widget.dart';
 
@@ -48,7 +48,7 @@ class _CitaActionsWidgetState extends State<CitaActionsWidget> {
                 context: context,
                 builder: (context) {
                   return AlertWidget(
-                    title: 'Esta seguro de borrar este Cita?',
+                    title: 'Esta seguro de borrar esta Cita?',
                     content: '',
                     actions: [
                       TextButton(
@@ -63,7 +63,7 @@ class _CitaActionsWidgetState extends State<CitaActionsWidget> {
                                   return AlertWidget(
                                     title: 'Cita eliminado con éxito.',
                                     content:
-                                        'El Cita se eliminó satisfactoriamente.',
+                                        'La Cita se eliminó satisfactoriamente.',
                                     actions: [
                                       TextButton(
                                         onPressed: () {

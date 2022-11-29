@@ -6,7 +6,7 @@ class Cita {
 
   Cita({this.id, this.pacienteId, this.doctorId, this.cita1});
 
-  Cita.fromJson(Map<String, dynamic> json) {
+    Cita.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     pacienteId = json['pacienteId'];
     doctorId = json['doctorId'];

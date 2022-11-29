@@ -1,12 +1,18 @@
+//import 'package:doctor_app/controller/paciente_controller.dart';
+import 'package:doctor_app/controller/doctor_controller.dart';
+import 'package:doctor_app/controller/paciente_controller.dart';
 import 'package:doctor_app/screens/Citas/Cita_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/cita_controller.dart';
-import '../../models/Cita.dart';
+import '../../models/cita.dart';
 import '../../models/doctor.dart';
 import '../../models/paciente.dart';
-import '../../repository/Cita_repository.dart';
+import '../../repository/cita_repository.dart';
+//import '../../repository/paciente_repository.dart';
+import '../../repository/doctor_repository.dart';
+import '../../repository/paciente_repository.dart';
 import '../../widget/alert_widget.dart';
 import '../../widget/radio_button_widget.dart';
 import '../../widget/text_field_date_widget.dart';
@@ -29,14 +35,30 @@ class _EditCitaPageState extends State<EditCitaPage> {
   TextEditingController cita1Controller = TextEditingController();
   List<Doctor> apiDoctores = [];
   List<Paciente> apiPacientes = [];
+  Paciente citaPaciente = Paciente();
+  //Doctor citaDoctor = Doctor();
+  //campos de doctor son requeridos
   CitaController citaController = CitaController(CitaRepository());
+  PacienteController pacienteController =
+      PacienteController(PacienteRepository());
+  DoctorController doctorController = DoctorController(DoctorRepository());
 
-    Future getPacientes() {
-    Future<List<Paciente>> futurePacientes = citaController.getPaciente();
+  Future getPacientes() {
+    Future<List<Paciente>> futurePacientes =
+        pacienteController.fetchPacienteList(widget.userFire!.uid);
     futurePacientes.then((list) {
       setState(() => apiPacientes = list);
     });
     return futurePacientes;
+  }
+
+  Future getDoctores() {
+    Future<List<Doctor>> futureDoctores =
+        doctorController.fetchDoctorList(widget.userFire!.uid);
+    futureDoctores.then((list) {
+      setState(() => apiDoctores = list);
+    });
+    return futureDoctores;
   }
 
   @override
@@ -44,6 +66,7 @@ class _EditCitaPageState extends State<EditCitaPage> {
     // TODO: implement initState
     super.initState();
     getPacientes();
+    getDoctores();
     cita1Controller.text = widget.selectedCita.cita1!;
   }
 
@@ -52,7 +75,7 @@ class _EditCitaPageState extends State<EditCitaPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Editando Cita: ${widget.selectedCita.doctorId} ${widget.selectedCita.pacienteId}'),
+            'Editando Cita: ${widget.selectedCita.cita1}'),
       ),
       body: SingleChildScrollView(
         child: Form(
@@ -61,55 +84,47 @@ class _EditCitaPageState extends State<EditCitaPage> {
             padding: const EdgeInsets.all(30.0),
             child: Column(
               children: [
-                TextFieldDateWidget(
-                  controller: nacimientoController,
-                  hintText: 'Nacimiento',
-                  labelText: 'Nacimiento',
-                  isDense: true,
-                  inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Fecha Nacimiento es requerido',
-                ),
+                DropdownButtonFormField<Paciente>(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.category_outlined),
+                    ),
+                    hint: const Text('Paciente'),
+                    items: apiPacientes.map((pac) {
+                      return DropdownMenuItem(
+                        value: pac,
+                        child: Text(pac.nombre!),
+                      );
+                    }).toList(),
+                    onChanged: (value) => setState(() {
+                          pacienteId = value!.id;
+                        })),
                 const SizedBox(
                   height: 20.0,
                 ),
-                RadioButtonWidget(
-                  onChanged: (val) => genero = val,
-                  labelText1: 'Hombre',
-                  labelText2: 'Mujer',
-                  generoSelected: genero,
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFieldWidget(
-                  controller: tipoSangreController,
-                  hintText: 'Tipo de Sangre',
-                  labelText: 'Tipo de Sangre',
-                  isDense: true,
-                  inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Tipo de Sangre es requerido',
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                TextFieldWidget(
-                  controller: nombreController,
-                  hintText: 'Nombre',
-                  labelText: 'Nombre',
-                  isDense: true,
-                  inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Nombre es requerido.',
-                ),
+                DropdownButtonFormField<Doctor>(
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.category_outlined),
+                    ),
+                    hint: const Text('Doctor'),
+                    items: apiDoctores.map((doc) {
+                      return DropdownMenuItem(
+                        value: doc,
+                        child: Text(doc.nombre!),
+                      );
+                    }).toList(),
+                    onChanged: (value) => setState(() {
+                          doctorId = value!.id;
+                        })),
                 const SizedBox(
                   height: 20.0,
                 ),
                 TextFieldWidget(
-                  controller: apellidosController,
-                  hintText: 'Apellidos',
-                  labelText: 'Apellidos',
+                  controller: cita1Controller,
+                  hintText: 'Cita 1',
+                  labelText: 'Cita 1',
                   isDense: true,
                   inputBorder: const OutlineInputBorder(),
-                  requiredText: 'Apellidos es requerido',
+                  requiredText: 'Cita 1',
                 ),
                 const SizedBox(
                   height: 30.0,
@@ -125,21 +140,19 @@ class _EditCitaPageState extends State<EditCitaPage> {
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
                       Cita createdCita = await citaController.putCita(Cita(
-                          id: widget.selectedCita.id,
-                          userId: widget.selectedCita.userId,
-                          nacimiento: nacimientoController.text,
-                          genero: genero,
-                          tipoSangre: tipoSangreController.text,
-                          nombre: nombreController.text,
-                          apellidos: apellidosController.text));
-                      if (createdCita.apellidos!.isNotEmpty) {
+                        id: widget.selectedCita.id,
+                        pacienteId: pacienteId!,
+                        doctorId: pacienteId!,
+                        cita1: cita1Controller.text,
+                      ));
+                      if (createdCita.cita1!.isNotEmpty) {
                         showDialog(
                             context: context,
                             builder: (context) {
                               return AlertWidget(
                                   title: 'Cita modificado con éxito',
                                   content:
-                                      'El Cita se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
+                                      'La Cita se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
                                   actions: [
                                     TextButton(
                                       onPressed: () {
@@ -152,10 +165,7 @@ class _EditCitaPageState extends State<EditCitaPage> {
                                               userFire: widget.userFire!),
                                         ));
                                         editFormKey.currentState!.reset();
-                                        nombreController.clear();
-                                        nacimientoController.clear();
-                                        tipoSangreController.clear();
-                                        apellidosController.clear();
+                                        cita1Controller.clear();
                                       },
                                       child: const Text('OK'),
                                     ),

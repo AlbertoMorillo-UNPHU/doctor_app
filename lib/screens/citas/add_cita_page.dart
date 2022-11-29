@@ -110,8 +110,8 @@ class _AddCitaPageState extends State<AddCitaPage> {
                   onPressed: () async {
                     if (editFormKey.currentState!.validate()) {
                       Cita createdCita = await citaController.postCita(Cita(
-                          pacienteId: pacienteId,
-                          doctorId: pacienteId,
+                          pacienteId: pacienteId!,
+                          doctorId: pacienteId!,
                           cita1: cita1Controller.text,));
                       if (createdCita.cita1!.isNotEmpty) {
                         showDialog(

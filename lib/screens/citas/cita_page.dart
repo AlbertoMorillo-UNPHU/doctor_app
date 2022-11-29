@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/cita_controller.dart';
-import '../../models/Cita.dart';
-import '../../repository/Cita_repository.dart';
+import '../../models/cita.dart';
+import '../../repository/cita_repository.dart';
 import '../../widget/info_widget.dart';
 import '../../widget/cita/cita_actions_widget.dart';
 import '../../widget/cita/cita_data_widget.dart';
@@ -103,7 +103,7 @@ class _CitaPageState extends State<CitaPage> {
                             ),
                             CitaActionsWidget(
                               data: data,
-                              CitaController: CitaController,
+                              citaController: citaController,
                               position: index,
                               userFire: widget.userFire,
                             ),
