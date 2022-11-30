@@ -10,6 +10,10 @@ class CitaController {
     return _citaRepository.getCitaList(id);
   }
 
+  Future<List<Cita>> fetchCitaListProximas() async {
+    return _citaRepository.getCitaListProximas();
+  }
+
   Future<Cita> postCita(Cita cita) async {
     return _citaRepository.postCita(cita);
   }

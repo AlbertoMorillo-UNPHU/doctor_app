@@ -6,6 +6,7 @@ import '../models/cita.dart';
 import 'global.dart';
 
 String dataURL = "${Global.dataURL}Citas/";
+String dataURLCustom = "${Global.dataURL}Citas";
 
 class CitaRepository implements RepositoryCita {
   http.Client client = http.Client();
@@ -32,6 +33,22 @@ class CitaRepository implements RepositoryCita {
   Future<List<Cita>> getCitaList(String id) async {
     List<Cita> parsedCita = [];
     http.Response citaResponse = await client.get(Uri.parse(dataURL));
+
+    if (citaResponse.statusCode == 200) {
+      String jsonStringCita = citaResponse.body;
+      parsedCita = List<Cita>.from(
+          json.decode(jsonStringCita).map((b) => Cita.fromJsonInclude(b)));
+      return parsedCita;
+    } else {
+      throw "Error al cargar la cita del usuario";
+    }
+  }
+
+  @override
+  Future<List<Cita>> getCitaListProximas() async {
+    List<Cita> parsedCita = [];
+    http.Response citaResponse =
+        await client.get(Uri.parse("$dataURLCustom/Proximas"));
 
     if (citaResponse.statusCode == 200) {
       String jsonStringCita = citaResponse.body;
