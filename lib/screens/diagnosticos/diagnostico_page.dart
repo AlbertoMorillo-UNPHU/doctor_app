@@ -1,9 +1,13 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../controller/diagnostico_controller.dart';
+import '../../controller/doctor_controller.dart';
 import '../../models/diagnostico.dart';
+import '../../models/doctor.dart';
 import '../../repository/diagnostico_repository.dart';
+import '../../repository/doctor_repository.dart';
 import '../../widget/alert_widget.dart';
 import '../../widget/delete_bg_item.dart';
 import '../../widget/info_widget.dart';
@@ -31,12 +35,20 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
   TextStyle propStyle =
       const TextStyle(color: Colors.black, fontWeight: FontWeight.bold);
 
+  DoctorController doctorController = DoctorController(DoctorRepository());
+  Future<List<Doctor>> getDoctores(String filter) {
+    Future<List<Doctor>> futureDoctores =
+        doctorController.fetchDoctorList(widget.userFire.uid);
+    return futureDoctores;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    futureDiagnostico =
-        diagnosticoController.fetchDiagnosticoList(widget.userFire.uid);
+    futureDiagnostico = diagnosticoController
+        .fetchDiagnosticoList(widget.userFire.uid)
+        .then((value) => apiDiagnostico = value);
   }
 
   @override
@@ -61,6 +73,7 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
                   MaterialPageRoute(
                       builder: (context) => AddDiagnosticoPage(
                             userFire: widget.userFire,
+                            paciente: null,
                           ))).then((value) => _refreshDiagnostico()),
               icon: const Icon(Icons.add)),
           IconButton(
@@ -87,51 +100,106 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
               } else if (snapshot.data!.isNotEmpty) {
                 List<Diagnostico> data = snapshot.data!;
 
-                return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return Dismissible(
-                      key: Key(data[index].id.toString()),
-                      onDismissed: (direction) {
-                        _showSnackBar(context, data[index], index);
-                        _removeEntity(data[index]);
-                      },
-                      background: const DeleteBgItem(),
-                      child: Card(
-                        margin: const EdgeInsets.all(10),
-                        color: Colors.blue[50],
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, top: 5, bottom: 5),
-                          child: Row(
-                            children: [
-                              DiagnosticoDataWidget(
-                                data: data,
-                                titleStyle: titleStyle,
-                                propStyle: propStyle,
-                                position: index,
+                return Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      child: _dropDownDoctor(),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return Dismissible(
+                            key: Key(data[index].id.toString()),
+                            onDismissed: (direction) {
+                              _showSnackBar(context, data[index], index);
+                              _removeEntity(data[index]);
+                            },
+                            background: const DeleteBgItem(),
+                            child: Card(
+                              margin: const EdgeInsets.all(10),
+                              color: Colors.blue[50],
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, top: 5, bottom: 5),
+                                child: Row(
+                                  children: [
+                                    DiagnosticoDataWidget(
+                                      data: data,
+                                      titleStyle: titleStyle,
+                                      propStyle: propStyle,
+                                      position: index,
+                                    ),
+                                    DiagnosticoActionsWidget(
+                                      data: data,
+                                      diagnosticoController:
+                                          diagnosticoController,
+                                      position: index,
+                                      userFire: widget.userFire,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              DiagnosticoActionsWidget(
-                                data: data,
-                                diagnosticoController: diagnosticoController,
-                                position: index,
-                                userFire: widget.userFire,
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 );
               } else {
-                return const InfoWidget(
-                    info: "No hay Diagnosticoes disponibles",
-                    color: Colors.red);
+                return Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      child: _dropdownMenuDoctorDefault(),
+                    ),
+                    const InfoWidget(
+                        info: "No hay Diagnosticos disponibles",
+                        color: Colors.red),
+                  ],
+                );
               }
           }
         },
       ),
+    );
+  }
+
+  DropdownSearch<Doctor> _dropDownDoctor() {
+    return DropdownSearch<Doctor>(
+      asyncItems: (String filter) => getDoctores(filter),
+      itemAsString: (Doctor u) => "${u.nombre!} ${u.apellidos}",
+      onChanged: (Doctor? data) {
+        setState(() {
+          futureDiagnostico = Future.value(apiDiagnostico);
+          futureDiagnostico = futureDiagnostico.then((value) {
+            return value
+                .where((element) => element.doctorId == data!.id)
+                .toList();
+          });
+        });
+      },
+      dropdownDecoratorProps: const DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(labelText: "Doctores"),
+      ),
+    );
+  }
+
+  DropdownSearch<Doctor> _dropdownMenuDoctorDefault() {
+    return DropdownSearch<Doctor>(
+      asyncItems: (String filter) => getDoctores(filter),
+      itemAsString: (Doctor u) => "${u.nombre!} ${u.apellidos}",
+      onChanged: (Doctor? data) {
+        setState(() {
+          _refreshDiagnostico();
+        });
+      },
+      dropdownDecoratorProps: const DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(labelText: "Doctores"),
+      ),
+      popupProps: const PopupProps.bottomSheet(),
     );
   }
 

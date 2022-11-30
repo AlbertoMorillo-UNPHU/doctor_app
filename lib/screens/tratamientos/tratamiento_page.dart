@@ -1,8 +1,12 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../../controller/doctor_controller.dart';
 import '../../controller/tratamiento_controller.dart';
+import '../../models/doctor.dart';
 import '../../models/tratamiento.dart';
+import '../../repository/doctor_repository.dart';
 import '../../repository/tratamiento_repository.dart';
 import '../../widget/alert_widget.dart';
 import '../../widget/delete_bg_item.dart';
@@ -32,11 +36,20 @@ class _TratamientoPageState extends State<TratamientoPage> {
   TextStyle propStyle =
       const TextStyle(color: Colors.black, fontWeight: FontWeight.bold);
 
+  DoctorController doctorController = DoctorController(DoctorRepository());
+  Future<List<Doctor>> getDoctores(String filter) {
+    Future<List<Doctor>> futureDoctores =
+        doctorController.fetchDoctorList(widget.userFire.uid);
+    return futureDoctores;
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    futureTratamiento = tratamientoController.fetchTratamientoList();
+    futureTratamiento = tratamientoController
+        .fetchTratamientoList()
+        .then((value) => apiTratamiento = value);
   }
 
   @override
@@ -87,51 +100,106 @@ class _TratamientoPageState extends State<TratamientoPage> {
               } else if (snapshot.data!.isNotEmpty) {
                 List<Tratamiento> data = snapshot.data!;
 
-                return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return Dismissible(
-                      key: Key(data[index].id.toString()),
-                      onDismissed: (direction) {
-                        _showSnackBar(context, data[index], index);
-                        _removeEntity(data[index]);
-                      },
-                      background: const DeleteBgItem(),
-                      child: Card(
-                        margin: const EdgeInsets.all(10),
-                        color: Colors.blue[50],
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10, top: 5, bottom: 5),
-                          child: Row(
-                            children: [
-                              TratamientoDataWidget(
-                                data: data,
-                                titleStyle: titleStyle,
-                                propStyle: propStyle,
-                                position: index,
+                return Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      child: _dropDownDoctor(),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return Dismissible(
+                            key: Key(data[index].id.toString()),
+                            onDismissed: (direction) {
+                              _showSnackBar(context, data[index], index);
+                              _removeEntity(data[index]);
+                            },
+                            background: const DeleteBgItem(),
+                            child: Card(
+                              margin: const EdgeInsets.all(10),
+                              color: Colors.blue[50],
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, top: 5, bottom: 5),
+                                child: Row(
+                                  children: [
+                                    TratamientoDataWidget(
+                                      data: data,
+                                      titleStyle: titleStyle,
+                                      propStyle: propStyle,
+                                      position: index,
+                                    ),
+                                    TratamientoActionsWidget(
+                                      data: data,
+                                      tratamientoController:
+                                          tratamientoController,
+                                      position: index,
+                                      userFire: widget.userFire,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              TratamientoActionsWidget(
-                                data: data,
-                                tratamientoController: tratamientoController,
-                                position: index,
-                                userFire: widget.userFire,
-                              ),
-                            ],
-                          ),
-                        ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 );
               } else {
-                return const InfoWidget(
-                    info: "No hay tratamientoes disponibles",
-                    color: Colors.red);
+                return Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      child: _dropdownMenuDoctorDefault(),
+                    ),
+                    const InfoWidget(
+                        info: "No hay tratamientoes disponibles",
+                        color: Colors.red),
+                  ],
+                );
               }
           }
         },
       ),
+    );
+  }
+
+  DropdownSearch<Doctor> _dropDownDoctor() {
+    return DropdownSearch<Doctor>(
+      asyncItems: (String filter) => getDoctores(filter),
+      itemAsString: (Doctor u) => "${u.nombre!} ${u.apellidos}",
+      onChanged: (Doctor? data) {
+        setState(() {
+          futureTratamiento = Future.value(apiTratamiento);
+          futureTratamiento = futureTratamiento.then((value) {
+            return value
+                .where((element) => element.doctorId == data!.id)
+                .toList();
+          });
+        });
+      },
+      dropdownDecoratorProps: const DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(labelText: "Doctores"),
+      ),
+    );
+  }
+
+  DropdownSearch<Doctor> _dropdownMenuDoctorDefault() {
+    return DropdownSearch<Doctor>(
+      asyncItems: (String filter) => getDoctores(filter),
+      itemAsString: (Doctor u) => "${u.nombre!} ${u.apellidos}",
+      onChanged: (Doctor? data) {
+        setState(() {
+          _refreshTratamiento();
+        });
+      },
+      dropdownDecoratorProps: const DropDownDecoratorProps(
+        dropdownSearchDecoration: InputDecoration(labelText: "Doctores"),
+      ),
+      popupProps: const PopupProps.bottomSheet(),
     );
   }
 

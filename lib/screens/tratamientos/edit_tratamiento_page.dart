@@ -216,46 +216,47 @@ class _EditTratamientoState extends State<EditTratamientoPage> {
                                 ]);
                           },
                         );
-                      }
-                      Tratamiento createdTratamiento =
-                          await tratamientoController.putTratamiento(
-                              Tratamiento(
-                                  id: widget.selectedTratamiento.id,
-                                  pacienteId: pacienteId,
-                                  doctorId: doctorId,
-                                  fechaInicio: fechaInicioController.text,
-                                  fechaFin: fechaFinController.text,
-                                  tratamientoDesc:
-                                      tratamientoDescController.text));
-                      if (createdTratamiento.tratamientoDesc!.isNotEmpty) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertWidget(
-                                  title: 'Tratamiento modificado con éxito',
-                                  content:
-                                      'El tratamiento se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    TratamientoPage(
-                                                        userFire:
-                                                            widget.userFire!)));
-                                        editFormKey.currentState!.reset();
-                                        tratamientoDescController.clear();
-                                        fechaInicioController.clear();
-                                        fechaFinController.clear();
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ]);
-                            });
+                      } else {
+                        Tratamiento createdTratamiento =
+                            await tratamientoController
+                                .putTratamiento(Tratamiento(
+                                    id: widget.selectedTratamiento.id,
+                                    pacienteId: pacienteId,
+                                    doctorId: doctorId,
+                                    fechaInicio: fechaInicioController.text,
+                                    fechaFin: fechaFinController.text,
+                                    tratamientoDesc:
+                                        tratamientoDescController.text));
+                        if (createdTratamiento.tratamientoDesc!.isNotEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertWidget(
+                                    title: 'Tratamiento modificado con éxito',
+                                    content:
+                                        'El tratamiento se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      TratamientoPage(
+                                                          userFire: widget
+                                                              .userFire!)));
+                                          editFormKey.currentState!.reset();
+                                          tratamientoDescController.clear();
+                                          fechaInicioController.clear();
+                                          fechaFinController.clear();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ]);
+                              });
+                        }
                       }
                     }
                   },

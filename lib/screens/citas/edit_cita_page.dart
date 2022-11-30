@@ -178,39 +178,40 @@ class _EditCitaPageState extends State<EditCitaPage> {
                                 ]);
                           },
                         );
-                      }
-                      Cita createdCita = await citaController.putCita(Cita(
-                        id: widget.selectedCita.id,
-                        pacienteId: pacienteId!,
-                        doctorId: doctorId!,
-                        cita1: cita1Controller.text,
-                      ));
-                      if (createdCita.cita1!.isNotEmpty) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertWidget(
-                                  title: 'Cita modificado con éxito',
-                                  content:
-                                      'La Cita se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) => CitaPage(
-                                              userFire: widget.userFire!),
-                                        ));
-                                        editFormKey.currentState!.reset();
-                                        cita1Controller.clear();
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ]);
-                            });
+                      } else {
+                        Cita createdCita = await citaController.putCita(Cita(
+                          id: widget.selectedCita.id,
+                          pacienteId: pacienteId!,
+                          doctorId: doctorId!,
+                          cita1: cita1Controller.text,
+                        ));
+                        if (createdCita.cita1!.isNotEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertWidget(
+                                    title: 'Cita modificado con éxito',
+                                    content:
+                                        'La Cita se ha modificado exitosamente. Puede ir al menú principal y refrescar.',
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) => CitaPage(
+                                                userFire: widget.userFire!),
+                                          ));
+                                          editFormKey.currentState!.reset();
+                                          cita1Controller.clear();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ]);
+                              });
+                        }
                       }
                     }
                   },

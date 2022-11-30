@@ -95,8 +95,10 @@ class _AddTratamientoPageState extends State<AddTratamientoPage> {
                       prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Seleccione Paciente'),
-                    value: apiPacientes.firstWhereOrNull(
-                        (element) => element.id == widget.paciente!.id),
+                    value: (widget.paciente == null)
+                        ? null
+                        : (apiPacientes.firstWhereOrNull(
+                            (element) => element.id == widget.paciente!.id)),
                     validator: (value) {
                       if (value == null) {
                         return "Debe seleccionar un doctor";
@@ -201,37 +203,38 @@ class _AddTratamientoPageState extends State<AddTratamientoPage> {
                                 ]);
                           },
                         );
-                      }
-                      Tratamiento createdTratamiento =
-                          await tratamientoController.postTratamiento(
-                              Tratamiento(
-                                  pacienteId: pacienteId,
-                                  doctorId: doctorId,
-                                  fechaInicio: fechaInicioController.text,
-                                  fechaFin: fechaFinController.text,
-                                  tratamientoDesc:
-                                      tratamientoDescController.text));
-                      if (createdTratamiento.tratamientoDesc!.isNotEmpty) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertWidget(
-                                  title: 'Tratamiento creado con éxito',
-                                  content:
-                                      'El tratamiento se ha creado exitosamente. Puede ir al menú principal y refrescar.',
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        editFormKey.currentState!.reset();
-                                        tratamientoDescController.clear();
-                                        fechaInicioController.clear();
-                                        fechaFinController.clear();
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ]);
-                            });
+                      } else {
+                        Tratamiento createdTratamiento =
+                            await tratamientoController
+                                .postTratamiento(Tratamiento(
+                                    pacienteId: pacienteId,
+                                    doctorId: doctorId,
+                                    fechaInicio: fechaInicioController.text,
+                                    fechaFin: fechaFinController.text,
+                                    tratamientoDesc:
+                                        tratamientoDescController.text));
+                        if (createdTratamiento.tratamientoDesc!.isNotEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertWidget(
+                                    title: 'Tratamiento creado con éxito',
+                                    content:
+                                        'El tratamiento se ha creado exitosamente. Puede ir al menú principal y refrescar.',
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          editFormKey.currentState!.reset();
+                                          tratamientoDescController.clear();
+                                          fechaInicioController.clear();
+                                          fechaFinController.clear();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ]);
+                              });
+                        }
                       }
                     }
                   },

@@ -94,8 +94,10 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
                       prefixIcon: Icon(Icons.select_all),
                     ),
                     hint: const Text('Paciente'),
-                    value: apiPacientes.firstWhereOrNull(
-                        (element) => element.id == widget.paciente!.id),
+                    value: (widget.paciente == null)
+                        ? null
+                        : (apiPacientes.firstWhereOrNull(
+                            (element) => element.id == widget.paciente!.id)),
                     validator: (value) {
                       if (value == null) {
                         return "Debe seleccionar un paciente";

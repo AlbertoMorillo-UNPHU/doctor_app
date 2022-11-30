@@ -167,31 +167,32 @@ class _AddCitaPageState extends State<AddCitaPage> {
                                 ]);
                           },
                         );
-                      }
-                      Cita createdCita = await citaController.postCita(Cita(
-                        pacienteId: pacienteId!,
-                        doctorId: doctorId!,
-                        cita1: cita1Controller.text,
-                      ));
-                      if (createdCita.cita1!.isNotEmpty) {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertWidget(
-                                  title: 'Cita creado con éxito',
-                                  content:
-                                      'El Cita se ha creado exitosamente. Puede ir al menú principal y refrescar.',
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                        editFormKey.currentState!.reset();
-                                        cita1Controller.clear();
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ]);
-                            });
+                      } else {
+                        Cita createdCita = await citaController.postCita(Cita(
+                          pacienteId: pacienteId!,
+                          doctorId: doctorId!,
+                          cita1: cita1Controller.text,
+                        ));
+                        if (createdCita.cita1!.isNotEmpty) {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertWidget(
+                                    title: 'Cita creado con éxito',
+                                    content:
+                                        'El Cita se ha creado exitosamente. Puede ir al menú principal y refrescar.',
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          editFormKey.currentState!.reset();
+                                          cita1Controller.clear();
+                                        },
+                                        child: const Text('OK'),
+                                      ),
+                                    ]);
+                              });
+                        }
                       }
                     }
                   },
