@@ -139,7 +139,7 @@ class _DoctorPageState extends State<DoctorPage> {
   }
 
   void _showSnackBar(BuildContext context, Doctor data, int index) {
-    SnackBar snackBar = SnackBar(content: Text("Eliminaste a ${data!.nombre}"));
+    SnackBar snackBar = SnackBar(content: Text("Eliminaste a ${data.nombre}"));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -159,7 +159,7 @@ class _DoctorPageState extends State<DoctorPage> {
                     Navigator.pop(context);
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          DoctorPage(userFire: widget.userFire!),
+                          DoctorPage(userFire: widget.userFire),
                     ));
                   },
                   child: const Text('OK'),

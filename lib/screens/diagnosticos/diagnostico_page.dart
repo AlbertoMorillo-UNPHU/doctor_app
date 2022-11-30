@@ -165,7 +165,7 @@ class _DiagnosticoPageState extends State<DiagnosticoPage> {
                     Navigator.pop(context);
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) =>
-                          DiagnosticoPage(userFire: widget.userFire!),
+                          DiagnosticoPage(userFire: widget.userFire),
                     ));
                   },
                   child: const Text('OK'),

@@ -160,8 +160,7 @@ class _CitaPageState extends State<CitaPage> {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          CitaPage(userFire: widget.userFire!),
+                      builder: (context) => CitaPage(userFire: widget.userFire),
                     ));
                   },
                   child: const Text('OK'),
