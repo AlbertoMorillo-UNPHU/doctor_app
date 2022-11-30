@@ -9,7 +9,7 @@ import 'package:gap/gap.dart';
 
 import '../../utils/app_styles.dart';
 import '../../widget/layout_builder_widget.dart';
-//import 'package:barcode_widget/barcode_widget.dart';
+import 'package:barcode_widget/barcode_widget.dart';
 
 class TicketScreen extends StatelessWidget {
 
