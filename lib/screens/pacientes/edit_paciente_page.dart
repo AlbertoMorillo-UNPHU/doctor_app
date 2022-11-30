@@ -164,6 +164,9 @@ class _EditPacientePageState extends State<EditPacientePage> {
                   },
                   child: const Text('Guardas cambios'),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   children: [
                     Expanded(
@@ -178,11 +181,16 @@ class _EditPacientePageState extends State<EditPacientePage> {
                           },
                           style: TextButton.styleFrom(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 30),
+                                  vertical: 10, horizontal: 10),
                               foregroundColor: Colors.white,
                               backgroundColor: Colors.blue,
-                              shape: const StadiumBorder()),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)))),
                           child: const Text('Diagnóstico')),
+                    ),
+                    const SizedBox(
+                      width: 10,
                     ),
                     Expanded(
                         child: TextButton(
@@ -196,10 +204,12 @@ class _EditPacientePageState extends State<EditPacientePage> {
                             },
                             style: TextButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 30),
+                                    vertical: 10, horizontal: 10),
                                 foregroundColor: Colors.white,
                                 backgroundColor: Colors.blue,
-                                shape: const StadiumBorder()),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)))),
                             child: const Text('Tratamiento')))
                   ],
                 )

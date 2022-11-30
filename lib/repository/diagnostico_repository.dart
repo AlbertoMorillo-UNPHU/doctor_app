@@ -53,6 +53,7 @@ class DiagnosticoRepository implements RepositoryDiagnostico {
   @override
   Future<Diagnostico> postDiagnostico(Diagnostico diagnostico) async {
     Diagnostico? diagnosticoCreado;
+
     print(jsonEncode(diagnostico.toJsonCustom()));
 
     http.Response postResponse = await client.post(Uri.parse(dataURL),

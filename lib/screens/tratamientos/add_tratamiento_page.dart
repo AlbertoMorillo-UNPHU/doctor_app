@@ -68,6 +68,9 @@ class _AddTratamientoPageState extends State<AddTratamientoPage> {
     super.initState();
     getDoctores();
     getPacientes();
+    if (widget.paciente != null) {
+      pacienteId = widget.paciente!.id;
+    }
   }
 
   @override

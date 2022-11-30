@@ -67,6 +67,10 @@ class _AddDiagnosticoPageState extends State<AddDiagnosticoPage> {
     super.initState();
     getDoctores();
     getPacientes();
+    if (widget.paciente != null) {
+      pacienteId = widget.paciente!.id;
+      paciente = widget.paciente!;
+    }
   }
 
   @override
