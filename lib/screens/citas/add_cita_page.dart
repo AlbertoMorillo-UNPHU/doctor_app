@@ -178,9 +178,9 @@ class _AddCitaPageState extends State<AddCitaPage> {
                             context: context,
                             builder: (context) {
                               return AlertWidget(
-                                  title: 'Cita creado con éxito',
+                                  title: 'Cita creada con éxito',
                                   content:
-                                      'El Cita se ha creado exitosamente. Puede ir al menú principal y refrescar.',
+                                      'La Cita se ha creado exitosamente. Puede ir al menú principal y refrescar.',
                                   actions: [
                                     TextButton(
                                       onPressed: () {

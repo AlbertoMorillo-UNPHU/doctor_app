@@ -108,10 +108,13 @@ class _CitaPageState extends State<CitaPage> {
                             ),
                           ],
                         ),
+                        
                       ),
                     );
                   },
                 );
+
+                
               } else {
                 return const InfoWidget(
                     info: "No hay Citas disponibles", color: Colors.red);
@@ -119,7 +122,10 @@ class _CitaPageState extends State<CitaPage> {
           }
         },
       ),
+      
     );
+
+    
   }
 
   _refreshCita() {
@@ -127,4 +133,6 @@ class _CitaPageState extends State<CitaPage> {
       futureCita = citaController.fetchCitaList(widget.userFire.uid);
     });
   }
+
+
 }
